@@ -13,3 +13,5 @@ This website currently uses very few frameworks (see [Toolchain](#toolchain)), s
 ## Toolchain
 
 Hosted by GitHub Pages
+
+Math displayed beautifully thanks to [MathJax](mathjax.org)
