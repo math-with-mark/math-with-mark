@@ -3,94 +3,102 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Math with Mark</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Reduction formula for cos^n(x)</title>
+
+    <!-- Bootstrap -->
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <base href="math/">
     <!-- Enable $ inline delimiters -->
     <script type="text/x-mathjax-config">
         MathJax.Hub.Config({
-          tex2jax: {
-            inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-            processEscapes: true
-          }
+            tex2jax: {
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                processEscapes: true
+            }
         });
     </script>
     <!-- MathJax 2.7.5 -->
-    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async>
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
     </script>
 </head>
 
 <body>
-    \(\newcommand{\dwrt}{\mathrm{d}} % "derivative with respect to"
-    \newcommand{\integral}[2]{\int {#1} \,\dwrt{#2}}\)
+    <div class="container">
+        \(\newcommand{\dwrt}{\mathrm{d}} % "derivative with respect to"
+        \newcommand{\integral}[2]{\int {#1} \,\dwrt{#2}}\)
 
-    Suppose we have
+        Suppose we have
 
-    $$ I_n = \integral{\cos^n(x)}{x} $$
+        $$ I_n = \integral{\cos^n(x)}{x} $$
 
-    where $n$ is some whole number: $n \in \{0, 1, 2, \dots\}$
+        where $n$ is some whole number: $n \in \{0, 1, 2, \dots\}$
 
-    We can simplify this with integration by parts:
+        We can simplify this with integration by parts:
 
-    $$ \integral{\cos^n(x)}{x} = \integral{\cos^{n - 1}(x)\cos(x)}{x} $$
+        $$ \integral{\cos^n(x)}{x} = \integral{\cos^{n - 1}(x)\cos(x)}{x} $$
 
-    $$ u = \cos^{n - 1}(x), \; \dwrt{v} = \cos(x) \,\dwrt{x}$$
+        $$ u = \cos^{n - 1}(x), \; \dwrt{v} = \cos(x) \,\dwrt{x}$$
 
-    We can solve for $\dwrt{u}$ using the Chain Rule. Recall that for any integer $k \neq -1$, $\cos^k(x) = [\cos(x)]^k$. (We exclude $-1$ because $\cos^{-1}(x) = \arccos(x)$)
+        We can solve for $\dwrt{u}$ using the Chain Rule. Recall that for any integer $k \neq -1$, $\cos^k(x) = [\cos(x)]^k$. (We exclude $-1$ because $\cos^{-1}(x) = \arccos(x)$)
 
-    \begin{align*}
-    u &= \cos^{n - 1}(x) \\
-    u &= [\cos(x)]^{n - 1} \\
-    \dwrt{u} &= (n - 1)[\cos(x)]^{n - 2} \cdot [-\sin(x)] \,\dwrt{x} \\
-    \dwrt{u} &= -(n - 1)\cos^{n - 2}(x)\sin(x) \,\dwrt{x}
-    \end{align*}
+        \begin{align*}
+        u &= \cos^{n - 1}(x) \\
+        u &= [\cos(x)]^{n - 1} \\
+        \dwrt{u} &= (n - 1)[\cos(x)]^{n - 2} \cdot [-\sin(x)] \,\dwrt{x} \\
+        \dwrt{u} &= -(n - 1)\cos^{n - 2}(x)\sin(x) \,\dwrt{x}
+        \end{align*}
 
-    And $v$ is simple: $v = \integral{}{v} = \integral{\cos(x)}{x} = \sin(x)$
+        And $v$ is simple: $v = \integral{}{v} = \integral{\cos(x)}{x} = \sin(x)$
 
-    Substituting in our functions, we have:
+        Substituting in our functions, we have:
 
-    \begin{align*}
-    \integral{u}{v} &= uv - \integral{v}{u} \\
-    &= \cos^{n - 1}(x)\sin(x) - \integral{\sin(x)\left[-(n - 1)\cos^{n - 2}(x)\sin(x)\right]}{x} \\
-    &= \cos^{n - 1}(x)\sin(x) + \integral{\sin(x)(n - 1)\cos^{n - 2}(x)\sin(x)}{x}
-    \end{align*}
+        \begin{align*}
+        \integral{u}{v} &= uv - \integral{v}{u} \\
+        &= \cos^{n - 1}(x)\sin(x) - \integral{\sin(x)\left[-(n - 1)\cos^{n - 2}(x)\sin(x)\right]}{x} \\
+        &= \cos^{n - 1}(x)\sin(x) + \integral{\sin(x)(n - 1)\cos^{n - 2}(x)\sin(x)}{x}
+        \end{align*}
 
-    For simplicity, I will introduce a new variable $A = \cos^{n - 1}(x)\sin(x)$.
+        For simplicity, I will introduce a new variable $A = \cos^{n - 1}(x)\sin(x)$.
 
-    \begin{align*}
-    I_n &= \cos^{n - 1}(x)\sin(x) + \integral{\sin(x)(n - 1)\cos^{n - 2}(x)\sin(x)}{x} \\
-    &= A + \integral{\sin(x)(n - 1)\cos^{n - 2}(x)\sin(x)}{x} \\
-    &= A + (n - 1)\integral{\sin(x)\cos^{n - 2}(x)\sin(x)}{x} \\
-    &= A + (n - 1)\integral{\sin^2(x)\cos^{n - 2}(x)}{x}
-    \end{align*}
+        \begin{align*}
+        I_n &= \cos^{n - 1}(x)\sin(x) + \integral{\sin(x)(n - 1)\cos^{n - 2}(x)\sin(x)}{x} \\
+        &= A + \integral{\sin(x)(n - 1)\cos^{n - 2}(x)\sin(x)}{x} \\
+        &= A + (n - 1)\integral{\sin(x)\cos^{n - 2}(x)\sin(x)}{x} \\
+        &= A + (n - 1)\integral{\sin^2(x)\cos^{n - 2}(x)}{x}
+        \end{align*}
 
-    Now recall $\sin^2(x) = 1 - \cos^2(x)$. We can make this substitution and then distribute:
+        Now recall $\sin^2(x) = 1 - \cos^2(x)$. We can make this substitution and then distribute:
 
-    \begin{align*}
-    I_n &= A + (n - 1)\integral{\sin^2(x)\cos^{n - 2}(x)}{x} \\
-    &= A + (n - 1)\integral{\left[1 - \cos^2(x)\right]\cos^{n - 2}(x)}{x} \\
-    &= A + (n - 1)\integral{\cos^{n - 2}(x) - \cos^2(x)\cos^{n - 2}(x)}{x} \\
-    I_n &= A + (n - 1)\integral{\cos^{n - 2}(x) - \cos^{n}(x)}{x} \\
-    \end{align*}
+        \begin{align*}
+        I_n &= A + (n - 1)\integral{\sin^2(x)\cos^{n - 2}(x)}{x} \\
+        &= A + (n - 1)\integral{\left[1 - \cos^2(x)\right]\cos^{n - 2}(x)}{x} \\
+        &= A + (n - 1)\integral{\cos^{n - 2}(x) - \cos^2(x)\cos^{n - 2}(x)}{x} \\
+        I_n &= A + (n - 1)\integral{\cos^{n - 2}(x) - \cos^{n}(x)}{x} \\
+        \end{align*}
 
-    We can split the integral on the right-hand side into two parts, and we will see that one of the new integrals on the right-hand side is the same as our integral on the left-hand side. Don't forget the grouping symbols! We need to remember to distribute the $(n - 1)$.
+        We can split the integral on the right-hand side into two parts, and we will see that one of the new integrals on the right-hand side is the same as our integral on the left-hand side. Don't forget the grouping symbols! We need to remember to distribute the $(n - 1)$.
 
-    \begin{align*}
-    I_n &= A + (n - 1)\integral{\cos^{n - 2}(x) - \cos^{n}(x)}{x} \\
-    &= A + (n - 1)\left[\integral{\cos^{n - 2}(x)}{x} - \integral{\cos^{n}(x)}{x}\right] \\
-    &= A + (n - 1)\integral{\cos^{n - 2}(x)}{x} - (n - 1)\integral{\cos^{n}(x)}{x} \\
-    I_n &= A + (n - 1)\integral{\cos^{n - 2}(x)}{x} - (n - 1)I_n
-    \end{align*}
+        \begin{align*}
+        I_n &= A + (n - 1)\integral{\cos^{n - 2}(x) - \cos^{n}(x)}{x} \\
+        &= A + (n - 1)\left[\integral{\cos^{n - 2}(x)}{x} - \integral{\cos^{n}(x)}{x}\right] \\
+        &= A + (n - 1)\integral{\cos^{n - 2}(x)}{x} - (n - 1)\integral{\cos^{n}(x)}{x} \\
+        I_n &= A + (n - 1)\integral{\cos^{n - 2}(x)}{x} - (n - 1)I_n
+        \end{align*}
 
-    To simplify, we add $(n - 1)I_n$ to both sides and divide by the new coefficient on the left-hand side:
+        To simplify, we add $(n - 1)I_n$ to both sides and divide by the new coefficient on the left-hand side:
 
-    \begin{align*}
-    I_n &= A + (n - 1)\integral{\cos^{n - 2}(x)}{x} - (n - 1)I_n \\
-    I_n + (n - 1)I_n &= A + (n - 1)\integral{\cos^{n - 2}(x)}{x} \\
-    (1 + n - 1)I_n &= A + (n - 1)\integral{\cos^{n - 2}(x)}{x} \\
-    nI_n &= A + (n - 1)\integral{\cos^{n - 2}(x)}{x} \\
-    I_n &= \frac{1}{n}A + \frac{(n - 1)}{n}\integral{\cos^{n - 2}(x)}{x} \\
-    \integral{\cos^n(x)}{x} &= \frac{1}{n}\cos^{n - 1}(x)\sin(x) + \frac{(n - 1)}{n}\integral{\cos^{n - 2}(x)}{x}
-    \end{align*}
+        \begin{align*}
+        I_n &= A + (n - 1)\integral{\cos^{n - 2}(x)}{x} - (n - 1)I_n \\
+        I_n + (n - 1)I_n &= A + (n - 1)\integral{\cos^{n - 2}(x)}{x} \\
+        (1 + n - 1)I_n &= A + (n - 1)\integral{\cos^{n - 2}(x)}{x} \\
+        nI_n &= A + (n - 1)\integral{\cos^{n - 2}(x)}{x} \\
+        I_n &= \frac{1}{n}A + \frac{(n - 1)}{n}\integral{\cos^{n - 2}(x)}{x} \\
+        \integral{\cos^n(x)}{x} &= \frac{1}{n}\cos^{n - 1}(x)\sin(x) + \frac{(n - 1)}{n}\integral{\cos^{n - 2}(x)}{x}
+        \end{align*}
 
-    Since the resulting integral on the right-hand side is $I_{n - 2}$, our reduction formula is complete.
+        Since the resulting integral on the right-hand side is $I_{n - 2}$, our reduction formula is complete.
+    </div>
 </body>
