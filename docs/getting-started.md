@@ -24,7 +24,7 @@ Here the the basic page skeleton.
     <![endif]-->
 
     <!-- MathJax 2.7.5 -->
-    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML,https://mark-wiemer.github.io/vendor/mathjax/config.js">
     </script>
 </head>
 
