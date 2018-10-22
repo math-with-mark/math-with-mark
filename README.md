@@ -14,6 +14,6 @@ This website currently uses very few frameworks (see [Toolchain](#toolchain)), s
 
 Hosted by GitHub Pages
 
-This website looks pretty because it uses [Bootstrap](getbootstrap.com)
+This website looks pretty because it uses [Bootstrap](https://getbootstrap.com)
 
-Math displayed beautifully thanks to [MathJax](mathjax.org)
+Math displayed beautifully thanks to [MathJax](https://mathjax.org)
