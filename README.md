@@ -12,7 +12,7 @@ This website currently uses very few frameworks (see [Toolchain](#toolchain)), s
 
 ## Toolchain
 
-Hosted by GitHub Pages
+Hosted by [GitHub Pages](https://pages.github.com)
 
 This website looks pretty because it uses [Bootstrap](https://getbootstrap.com)
 
