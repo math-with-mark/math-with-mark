@@ -1,6 +1,6 @@
 # Getting Started
 
-Here the the basic page skeleton.
+Here is the basic page skeleton.
 
 ```html
 <!DOCTYPE html>
