@@ -1,6 +1,6 @@
 # Math with Mark
 
-A personal website to share math information and practice basic web development. View it live at https://mathwithmark.com.
+A personal website to share math information and practice basic web development. View it live at [mathwithmark.com](https://mathwithmark.com).
 
 ## Development
 
