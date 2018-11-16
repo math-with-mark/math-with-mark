@@ -16,4 +16,4 @@ Hosted by [GitHub Pages](https://pages.github.com)
 
 This website looks pretty because it uses [Bootstrap](https://getbootstrap.com)
 
-Math displayed beautifully thanks to [MathJax](https://mathjax.org)
+Math displayed beautifully thanks to [KaTeX](https://katex.org)
