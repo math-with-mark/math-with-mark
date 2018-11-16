@@ -13,7 +13,8 @@ Here is the basic page skeleton.
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title><!-- TODO TITLE --></title>
 
-    <script src="/index.js"></script> <!-- Render LaTeX with global macros -->
+    <!-- TODO fix path to point to index.js at root of project -->
+    <script src="index.js"></script> <!-- Render LaTeX with global macros -->
 
     <!-- Bootstrap -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
