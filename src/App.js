@@ -1,7 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
+
 import About from './About';
+
+function ConstructionAlert() {
+  const [show, setShow] = useState(true);
+
+  if (show) {
+    return (
+      <Alert variant="primary" onClose={() => setShow(false)} dismissible>
+        This site is under construction.
+      </Alert>
+    );
+  }
+  return '';
+}
 
 const Index = () => (
   <div>
@@ -12,7 +26,7 @@ const Index = () => (
 
 const App = () => (
   <div>
-    <Alert variant="primary">This site is under construction.</Alert>
+    <ConstructionAlert />
     <Router>
       <div>
         <nav>
