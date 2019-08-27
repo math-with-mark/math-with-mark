@@ -1,12 +1,11 @@
 import React from 'react';
-import Alert from 'react-bootstrap/Alert';
 
-export const About = () => (
-    <div>
-        <Alert variant="primary">This site is under construction.</Alert>
+const About = () => (
+  <div>
+    <h2>About</h2>
     <p>
       Hi, my name is Mark. I'm a math tutor at University of Wisconsin-Madison,
-      and I wanted to create a site to better serve students struggling in math.
+      and I want to create a site to better serve students struggling in math.
     </p>
     <p>
       This site offers supplemental learning material that I believe is
@@ -31,8 +30,7 @@ export const About = () => (
       (a free GitHub account is required). I'm also open to any general feedback
       about the site through that link.
     </p>
-    <p>
-      <a href="index.html">Home</a>
-    </p>
   </div>
 );
+
+export default About;
