@@ -24,22 +24,25 @@ const Index = () => (
   </div>
 );
 
+const Navigation = () => (
+  <nav>
+    <ul>
+      <li>
+        <Link to="/">Home</Link>
+      </li>
+      <li>
+        <Link to="/about/">About</Link>
+      </li>
+    </ul>
+  </nav>
+);
+
 const App = () => (
   <div>
     <ConstructionAlert />
     <Router>
       <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/about/">About</Link>
-            </li>
-          </ul>
-        </nav>
-
+        <Navigation />
         <Route path="/" exact component={Index} />
         <Route path="/about/" component={About} />
       </div>
