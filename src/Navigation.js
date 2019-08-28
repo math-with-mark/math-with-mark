@@ -49,8 +49,6 @@ const Navigation = () => (
   </nav>
 );
 
-console.log(Navigation());
-
 /* Return component to be rendered */
 function link(element, basePath) {
   let fullPath = `${basePath}/${element.path}`;
