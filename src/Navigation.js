@@ -20,6 +20,7 @@ const PATHS = [
     component: About,
   },
   {
+    id: '2',
     path: 'classes',
     name: 'Classes',
     children: [
@@ -55,7 +56,7 @@ function link(element, basePath) {
   let fullPath = `${basePath}/${element.path}`;
   if (element.children !== undefined) {
     return (
-      <div key={element.name}>
+      <div key={element.id}>
         <li>
           {element.component ? (
             <Link to={fullPath}>{element.name}</Link>
@@ -68,7 +69,7 @@ function link(element, basePath) {
     );
   }
   return (
-    <li key={element.name}>
+    <li key={element.id}>
       <Link to={fullPath}>{element.name}</Link>{' '}
     </li>
   );
