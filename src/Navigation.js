@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link, Route } from 'react-router-dom';
 
-import About from './About';
-import CalculusI from './CalculusI';
 import Home from './Home';
-import Review from './Review';
+import About from './About';
+import CalculusI from './classes/calcI/CalculusI';
+import Review from './classes/calcI/Review';
 
 const PATHS = [
   {
@@ -15,23 +15,24 @@ const PATHS = [
   },
   {
     id: '1',
-    path: 'about',
+    path: 'About',
     name: 'About',
     component: About,
   },
   {
-    path: 'classes',
+    id: '2',
+    path: 'Classes',
     name: 'Classes',
     children: [
       {
         id: '3',
-        path: 'calcI',
+        path: 'CalcI',
         name: 'Calculus I',
         component: CalculusI,
         children: [
           {
             id: '4',
-            path: 'introReview',
+            path: 'IntroReview',
             name: 'Review',
             component: Review,
           },
@@ -48,14 +49,12 @@ const Navigation = () => (
   </nav>
 );
 
-console.log(Navigation());
-
 /* Return component to be rendered */
 function link(element, basePath) {
   let fullPath = `${basePath}/${element.path}`;
   if (element.children !== undefined) {
     return (
-      <div key={element.name}>
+      <div key={element.id}>
         <li>
           {element.component ? (
             <Link to={fullPath}>{element.name}</Link>
@@ -68,7 +67,7 @@ function link(element, basePath) {
     );
   }
   return (
-    <li key={element.name}>
+    <li key={element.id}>
       <Link to={fullPath}>{element.name}</Link>{' '}
     </li>
   );
