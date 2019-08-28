@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link, Route } from 'react-router-dom';
 
-import About from './About';
-import CalculusI from './Classes/CalcI/CalculusI';
 import Home from './Home';
-import Review from './Classes/CalcI/Review';
+import About from './About';
+import CalculusI from './classes/calcI/CalculusI';
+import Review from './classes/calcI/Review';
 
 const PATHS = [
   {
