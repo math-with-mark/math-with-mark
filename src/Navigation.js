@@ -2,9 +2,9 @@ import React from 'react';
 import { Link, Route } from 'react-router-dom';
 
 import About from './About';
-import CalculusI from './CalculusI';
+import CalculusI from './classes/calcI/CalculusI';
 import Home from './Home';
-import Review from './Review';
+import Review from './classes/calcI/introReview/Review';
 
 const PATHS = [
   {
