@@ -2,9 +2,9 @@ import React from 'react';
 import { Link, Route } from 'react-router-dom';
 
 import About from './About';
-import CalculusI from './classes/calcI/CalculusI';
+import CalculusI from './Classes/CalcI/CalculusI';
 import Home from './Home';
-import Review from './classes/calcI/introReview/Review';
+import Review from './Classes/CalcI/Review';
 
 const PATHS = [
   {
@@ -15,24 +15,24 @@ const PATHS = [
   },
   {
     id: '1',
-    path: 'about',
+    path: 'About',
     name: 'About',
     component: About,
   },
   {
     id: '2',
-    path: 'classes',
+    path: 'Classes',
     name: 'Classes',
     children: [
       {
         id: '3',
-        path: 'calcI',
+        path: 'CalcI',
         name: 'Calculus I',
         component: CalculusI,
         children: [
           {
             id: '4',
-            path: 'introReview',
+            path: 'IntroReview',
             name: 'Review',
             component: Review,
           },
