@@ -37,5 +37,9 @@ In this stage, the code is reviewed in a diff viewer to make sure it matches sty
 
 1. Update "Last updated" message in [`Home.js`](../src/Home.js)
 1. `npm run deploy`
-1. Navigate to `mathwithmark.com`
+1. Navigate to `mathwithmark.com` (Ideally this site would change away from the production site)
 1. Refresh the page until the "Last updated" message reflects the new time (should take less than five minutes)
+
+## Stage 4: Live Production Site
+
+This stage is currently unnecessary, as the live development site _is_ the live production site for now. But I hope to change that in the near future as well.
