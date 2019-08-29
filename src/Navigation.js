@@ -6,40 +6,24 @@ import About from './About';
 import CalculusI from './classes/calcI/CalculusI';
 import Review from './classes/calcI/Review';
 
+export class RouteObject {
+  constructor(id, name, path, component, children) {
+    this.id = id;
+    this.name = name;
+    this.path = path;
+    this.component = component;
+    this.children = children;
+  }
+}
+
 export const routes = [
-  {
-    id: '0',
-    path: '',
-    name: 'Home',
-    component: Home,
-  },
-  {
-    id: '1',
-    path: 'About',
-    name: 'About',
-    component: About,
-  },
-  {
-    id: '2',
-    path: 'Classes',
-    name: 'Classes',
-    children: [
-      {
-        id: '3',
-        path: 'CalcI',
-        name: 'Calculus I',
-        component: CalculusI,
-        children: [
-          {
-            id: '4',
-            path: 'IntroReview',
-            name: 'Review',
-            component: Review,
-          },
-        ],
-      },
-    ],
-  },
+  new RouteObject('0', 'Home', 'Home', Home, undefined),
+  new RouteObject('1', 'About', 'About', About, undefined),
+  new RouteObject('2', 'Classes', 'Classes', undefined, [
+    new RouteObject('3', 'Calculus I', 'CalcI', CalculusI, [
+      new RouteObject('4', 'Review', 'IntroReview', Review, undefined),
+    ]),
+  ]),
 ];
 
 const Navigation = props => (
