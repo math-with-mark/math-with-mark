@@ -6,7 +6,7 @@ import About from './About';
 import CalculusI from './classes/calcI/CalculusI';
 import Review from './classes/calcI/Review';
 
-const PATHS = [
+export const routes = [
   {
     id: '0',
     path: '',
@@ -42,10 +42,10 @@ const PATHS = [
   },
 ];
 
-const Navigation = () => (
+const Navigation = props => (
   <nav>
-    <ul>{PATHS.map(element => link(element, ''))}</ul>
-    {PATHS.map(element => route(element, ''))}
+    <ul>{props.routes.map(element => link(element, ''))}</ul>
+    {props.routes.map(element => route(element, ''))}
   </nav>
 );
 
