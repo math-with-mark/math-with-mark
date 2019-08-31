@@ -17,11 +17,11 @@ export class RouteObject {
 }
 
 export const routes = [
-  new RouteObject('0', 'Home', 'Home', Home, undefined),
-  new RouteObject('1', 'About', 'About', About, undefined),
+  new RouteObject('0', 'Home', 'Home', Home, []),
+  new RouteObject('1', 'About', 'About', About, []),
   new RouteObject('2', 'Classes', 'Classes', undefined, [
     new RouteObject('3', 'Calculus I', 'CalcI', CalculusI, [
-      new RouteObject('4', 'Review', 'IntroReview', Review, undefined),
+      new RouteObject('4', 'Review', 'IntroReview', Review, []),
     ]),
   ]),
 ];
@@ -36,30 +36,21 @@ const Navigation = props => (
 /* Return component to be rendered */
 function link(element, basePath) {
   let fullPath = `${basePath}/${element.path}`;
-  if (element.children !== undefined) {
-    return (
-      <div key={element.id}>
-        <li>
-          {element.component ? (
-            <Link to={fullPath}>{element.name}</Link>
-          ) : (
-            element.name
-          )}
-        </li>
-        <ul>{element.children.map(child => link(child, fullPath))}</ul>
-      </div>
-    );
-  }
   return (
     <li key={element.id}>
-      <Link to={fullPath}>{element.name}</Link>{' '}
+      {element.component ? (
+        <Link to={fullPath}>{element.name}</Link>
+      ) : (
+        element.name
+      )}
+      <ul>{element.children.map(child => link(child, fullPath))}</ul>
     </li>
   );
 }
 
 function route(element, basePath) {
   let fullPath = `${basePath}/${element.path}`;
-  if (element.children !== undefined) {
+  if (element.children.length > 0) {
     return (
       <div key={element.id}>
         {element.component ? routeFor(element, fullPath) : ''}
