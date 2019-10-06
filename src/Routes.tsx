@@ -28,7 +28,7 @@ export class RouteObject {
 }
 
 export const routes: RouteObject[] = [
-  new RouteObject('0', 'Home', 'Home', Home, []),
+  new RouteObject('0', 'Home', '', Home, []),
   new RouteObject('1', 'About', 'About', About, []),
   new RouteObject('2', 'Classes', 'Classes', null, [
     new RouteObject('3', 'Calculus I', 'CalcI', CalculusI, [
