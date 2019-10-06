@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CalculusI = () => (
+const CalculusI = (): JSX.Element => (
   <div>
     <h2>Calculus I</h2>
     <p>Please select a lesson.</p>
