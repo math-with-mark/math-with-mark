@@ -17,11 +17,11 @@ it('renders without crashing', () => {
 });
 
 it('renders simple links', () => {
-  const id = '0',
-    name = 'Home (where the heart is)',
-    path = 'Home',
-    component = () => <h1>Home</h1>,
-    children = [];
+  const id = '0';
+  const name = 'Home (where the heart is)';
+  const path = 'Home';
+  const component = () => <h1>Home</h1>;
+  const children: RouteObject[] = [];
   const routes = [new RouteObject(id, name, path, component, children)];
   const expectedChild = <Link to={`/${path}`}>{name}</Link>;
 
@@ -64,7 +64,7 @@ it('renders link nested in non-link', () => {
     path2 = 'MoreDeets',
     component2 = () => <h2>More</h2>;
   const routes = [
-    new RouteObject(id, name, path, undefined, [
+    new RouteObject(id, name, path, null, [
       new RouteObject(id2, name2, path2, component2, []),
     ]),
   ];
@@ -83,14 +83,14 @@ it('renders link nested in non-link', () => {
 it('renders multiple children deeply nested', () => {
   const routes = [
     new RouteObject('0', 'Home', 'home', () => <></>, [
-      new RouteObject('1', 'Oldest Child', 'oldest', undefined, [
+      new RouteObject('1', 'Oldest Child', 'oldest', null, [
         new RouteObject('2', 'Older grandchild', 'oldergrand', () => <></>, []),
-        new RouteObject('3', 'Younger grandchild', 'youngg', undefined, []),
+        new RouteObject('3', 'Younger grandchild', 'youngg', null, []),
       ]),
       new RouteObject('4', 'Middle Child', 'middle', () => <></>, []),
       new RouteObject('5', 'Best  Child', 'best', () => <></>, []),
     ]),
-    new RouteObject('6', 'About', 'about', undefined, []),
+    new RouteObject('6', 'About', 'about', null, []),
   ];
 
   const wrapper = render(
