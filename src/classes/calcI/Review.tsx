@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Review = () => (
+const Review = (): JSX.Element => (
   <div>
     <h3>Get Ready to Review!</h3>
   </div>

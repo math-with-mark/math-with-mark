@@ -5,7 +5,7 @@ import ConstructionAlert from './ConstructionAlert';
 import Navigation from './Navigation';
 import Routes, { routes } from './Routes';
 
-const App = () => (
+const App = (): JSX.Element => (
   <div>
     <ConstructionAlert />
     <HashRouter>

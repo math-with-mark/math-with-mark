@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Alert from 'react-bootstrap/Alert';
 
-function ConstructionAlert() {
+function ConstructionAlert(): JSX.Element {
   const [show, setShow] = useState(true);
 
   return show ? (
