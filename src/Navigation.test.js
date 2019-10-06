@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import { HashRouter, Link } from 'react-router-dom';
 import { shallow, render } from 'enzyme';
 
-import Navigation, { RouteObject } from './Navigation';
+import Navigation from './Navigation';
+import { RouteObject } from './Routes';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
