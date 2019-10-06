@@ -1,19 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { RouteObject } from './Routes';
 
 /**
  * Procedurally generated nested, unordered list of internal links
  * @param {*} props should contain a `routes` attribute that is a list of
  * `RouteObject`s
  */
-const Navigation = props => (
+const Navigation = (props: { routes: RouteObject[] }): JSX.Element => (
   <nav>
     <ul>{props.routes.map(element => link(element, ''))}</ul>
   </nav>
 );
 
 /* Return component to be rendered */
-function link(element, basePath) {
+function link(element: RouteObject, basePath: string): JSX.Element {
   let fullPath = `${basePath}/${element.path}`;
   return (
     <li key={element.id}>
