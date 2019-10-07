@@ -34,7 +34,7 @@ jobs:
       - image: circleci/node:7.10
     steps:
       - checkout
-      - run: npm deploy
+      - run: npm run deploy
 
 workflows:
   version: 2
