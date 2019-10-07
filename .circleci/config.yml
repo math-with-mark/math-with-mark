@@ -50,6 +50,10 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
+      - run: git config --global user.email "markwiemer@outlook.com"
+
+      - run: git config --global user.name "CircleCI on behalf of Mark Wiemer"
+
       - run: npm run deploy
 
 workflows:
