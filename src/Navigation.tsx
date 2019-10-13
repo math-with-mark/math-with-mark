@@ -3,9 +3,7 @@ import { Link } from 'react-router-dom';
 import { RouteObject } from './Routes';
 
 /**
- * Procedurally generated nested, unordered list of internal links
- * @param {*} props should contain a `routes` attribute that is a list of
- * `RouteObject`s
+ * Procedurally generated, nested, unordered list of internal links
  */
 const Navigation = (props: { routes: RouteObject[] }): JSX.Element => (
   <nav>
