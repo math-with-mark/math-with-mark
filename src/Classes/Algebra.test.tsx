@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import CalculusI from './CalculusI';
+import Algebra from './Algebra';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<CalculusI />, div);
+  ReactDOM.render(<Algebra />, div);
 });
