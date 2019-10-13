@@ -7,6 +7,10 @@ import Algebra from './Classes/Algebra';
 import IntegerExponents from './Classes/Alg/Preliminaries/IntegerExponents';
 import Preliminaries from './Classes/Alg/Preliminaries';
 
+const Routes = (props: { routes: RouteObject[] }): JSX.Element => (
+  <div>{props.routes.map(element => route(element, ''))}</div>
+);
+
 export class RouteObject {
   id: string;
   name: string;
@@ -45,10 +49,6 @@ export const routes: RouteObject[] = [
     ]),
   ]),
 ];
-
-const Routes = (props: { routes: RouteObject[] }): JSX.Element => (
-  <div>{props.routes.map(element => route(element, ''))}</div>
-);
 
 /**
  * Returns the absolute path to the component, if it exists. Otherwise, returns
