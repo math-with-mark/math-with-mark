@@ -16,11 +16,14 @@ const About = (): JSX.Element => (
       instill in them confidence in their abilities to tackle large, complex
       problems.
     </p>
+    <h3>Acknowledgements</h3>
     <p>
-      Everything about this website is open source. For the techies out there,
-      you can view the GitHub repo{' '}
-      <a href="https://github.com/mark-wiemer/mark-wiemer.github.io">here</a>.
+      The structure of the lessons on this site was heavily inspired by{' '}
+      <a href="https://tutorial.math.lamar.edu">Paul Dawkins' online notes</a>.
+      Those notes have been an awesome reference for me, both as a student and
+      as a tutor.
     </p>
+    <h3>Miscellaneous</h3>
     <p>
       If you find any issues, points of confusion, or weird behaviors with the
       website, please{' '}
@@ -29,6 +32,11 @@ const About = (): JSX.Element => (
       </a>{' '}
       (a free GitHub account is required). I'm also open to any general feedback
       about the site through that link.
+    </p>
+    <p>
+      Everything about this website is open source. For the techies out there,
+      you can view the GitHub repo{' '}
+      <a href="https://github.com/mark-wiemer/mark-wiemer.github.io">here</a>.
     </p>
   </div>
 );
