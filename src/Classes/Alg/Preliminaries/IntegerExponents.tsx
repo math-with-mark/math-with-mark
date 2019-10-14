@@ -2,7 +2,7 @@ import React from 'react';
 
 const IntegerExponents = (): JSX.Element => (
   <div>
-    <h3>Algebra 1-1: Integer Exponents</h3>
+    <h2>Algebra 1-1: Integer Exponents</h2>
   </div>
 );
 
