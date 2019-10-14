@@ -13,16 +13,6 @@ const Home = (): JSX.Element => (
       </a>{' '}
       for more information.
     </p>
-    <MathJax.Provider>
-      <p>
-        This is an inline math formula:{' '}
-        <MathJax.Node inline formula={'a^2 + b^2 = c^2'} />
-      </p>
-      <p>
-        And a block one:
-        <MathJax.Node formula={'F(x) = \\int_a^b f(t)\\,dt'} />
-      </p>
-    </MathJax.Provider>
   </div>
 );
 
