@@ -1,11 +1,11 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 
-import Home from './Home';
-import About from './About';
-import Algebra from './Classes/Algebra';
-import IntegerExponents from './Classes/Alg/Preliminaries/IntegerExponents';
-import Preliminaries from './Classes/Alg/Preliminaries';
+import Home from './pages/Home';
+import About from './pages/About';
+import Algebra from './pages/classes/Algebra';
+import Preliminaries from './pages/classes/alg/Preliminaries';
+import IntegerExponents from './pages/classes/alg/01_preliminaries/IntegerExponents';
 
 const Routes = (props: { routes: RouteObject[] }): JSX.Element => (
   <div>{props.routes.map(element => route(element, ''))}</div>

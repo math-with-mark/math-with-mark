@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link, HashRouter } from 'react-router-dom';
-import { routeTo } from '../Routes';
-import Preliminaries from './Alg/Preliminaries';
-import IntegerExponents from './Alg/Preliminaries/IntegerExponents';
+import { routeTo } from '../../Routes';
+import Preliminaries from './alg/Preliminaries';
+import IntegerExponents from './alg/01_preliminaries/IntegerExponents';
 
 const Algebra = (): JSX.Element => (
   <HashRouter>

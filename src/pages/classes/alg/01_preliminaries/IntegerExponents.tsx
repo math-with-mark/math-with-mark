@@ -1,5 +1,6 @@
 import React from 'react';
-import Latex from '../../../Latex';
+
+import Latex from '../../../../Latex';
 
 const IntegerExponents = (): JSX.Element => (
   <div>

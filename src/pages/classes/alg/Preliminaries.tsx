@@ -1,6 +1,6 @@
 import React from 'react';
-import { routeTo } from '../../Routes';
-import IntegerExponents from './Preliminaries/IntegerExponents';
+import { routeTo } from '../../../Routes';
+import IntegerExponents from './01_preliminaries/IntegerExponents';
 import { Link } from 'react-router-dom';
 
 const Preliminaries = () => (
