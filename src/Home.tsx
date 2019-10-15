@@ -1,5 +1,4 @@
 import React from 'react';
-import MathJax from 'react-mathjax';
 
 const Home = (): JSX.Element => (
   <div>
