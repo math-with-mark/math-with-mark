@@ -1,5 +1,5 @@
 import React from 'react';
-import MathJax from 'react-mathjax';
+import Latex from '../../../Latex';
 
 const IntegerExponents = (): JSX.Element => (
   <div>
@@ -11,12 +11,10 @@ const IntegerExponents = (): JSX.Element => (
     </p>
     <h3>Properties</h3>
     <ol>
-      <MathJax.Provider>
-        <li>
-          <MathJax.Node inline formula={'a^ba^c = a^{b+c}'} />. For example,{' '}
-          <MathJax.Node inline formula={'2^3\\cdot 2^4 = 2^7'} />
-        </li>
-      </MathJax.Provider>
+      <li>
+        <Latex inline content={'a^ba^c = a^{b+c}'} />. For example,{' '}
+        <Latex inline content={'2^3\\cdot 2^4 = 2^7'} />
+      </li>
     </ol>
   </div>
 );
