@@ -1,4 +1,5 @@
 import * as mathjs from 'mathjs';
+import { cast } from './cast';
 
 /**
  * Returns the coefficient of terms of the form (COEFFICIENT)(SYMBOL)^(POWER).
@@ -10,19 +11,19 @@ import * as mathjs from 'mathjs';
  * @param power The power to which the symbol is raised
  * @param coefficient The current coefficient (used in recursive calls)
  */
-export function coeff(
+export function coefficient(
   root: mathjs.MathNode,
   symbol: string,
   power: number,
 ): number {
   // node is OperatorNode from contract, either '+' or '*'
-  let op = safe<string>(root.op, '');
+  let op = cast<string>(root.op, '');
   let children = args(root);
   if (op === '+') {
-    let coefficient = 0;
-    coefficient += coeff(children[0], symbol, power);
-    coefficient += coeff(children[1], symbol, power);
-    return coefficient;
+    let coeff = 0;
+    coeff += coefficient(children[0], symbol, power);
+    coeff += coefficient(children[1], symbol, power);
+    return coeff;
   }
 
   // op === '*'. Fields are guaranteed from Ax^B structure
@@ -35,34 +36,10 @@ export function coeff(
   return 0;
 }
 
-/** Safely casts arg to type T. If arg is undefined, def is returned */
-function safe<T>(arg: T | undefined, def: T): T {
-  if (typeof arg === 'undefined') return def;
-  return arg;
-}
-
-/** Get the children of this node, aka its args */
-function args(node: mathjs.MathNode): mathjs.MathNode[] {
-  return safe<mathjs.MathNode[]>(node.args, []);
-}
-
 /**
- * Returns a string representation of the AST
- * @param root The root of the AST
+ * Get the children of this node, aka its args.
+ * Returns [] when there are no children present
  */
-function toString(root: mathjs.MathNode): string {
-  switch (root.type) {
-    case 'OperatorNode':
-      return (
-        toString(args(root)[0]) +
-        safe<string>(root.op, '') +
-        toString(args(root)[1])
-      );
-    case 'ConstantNode':
-      return root.value;
-    case 'SymbolNode':
-      return safe<string>(root.name, '');
-    default:
-      return root.type;
-  }
+function args(node: mathjs.MathNode): mathjs.MathNode[] {
+  return cast<mathjs.MathNode[]>(node.args, []);
 }
