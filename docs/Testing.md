@@ -30,12 +30,14 @@ In this stage, the code is reviewed in a diff viewer to make sure it matches sty
 
 1. `npm start`
 1. Navigate to `localhost:3000`
+1. Make sure there is no logging in the console (Ctrl+Shift+I)
 
 ## Stage 2: Build Testing
 
 1. `npm run build`
 1. `serve -s build`
 1. Navigate to `localhost:5000`
+1. Make sure there is no logging in the console (Ctrl+Shift+I)
 
 ## Stage 3: Development Site
 
@@ -43,6 +45,7 @@ In this stage, the code is reviewed in a diff viewer to make sure it matches sty
 1. `npm run deploy`
 1. Navigate to `mathwithmark.com` (Ideally this site would change away from the production site)
 1. Refresh the page until the "Last updated" message reflects the new time (should take less than five minutes)
+1. Make sure there is no logging in the console (Ctrl+Shift+I)
 
 ## Stage 4: Deployment
 
