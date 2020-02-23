@@ -100,17 +100,19 @@ function componentRouteHelper(
   return undefined;
 }
 
+/**
+ * Returns the JSX Element (HTML components) for this RouteObject and its children
+ * @param element
+ * @param basePath
+ */
 function route(element: RouteObject, basePath: string): JSX.Element {
   let fullPath = `${basePath}/${element.path}`;
-  if (element.children.length > 0) {
-    return (
-      <div key={element.id}>
-        {element.component ? routeFor(element, fullPath) : ''}
-        {element.children.map(child => route(child, fullPath))}
-      </div>
-    );
-  }
-  return routeFor(element, fullPath);
+  return (
+    <div key={element.id}>
+      {element.component ? routeFor(element, fullPath) : ''}
+      {element.children.map(child => route(child, fullPath))}
+    </div>
+  );
 }
 
 function routeFor(element: RouteObject, fullPath: string): JSX.Element {
