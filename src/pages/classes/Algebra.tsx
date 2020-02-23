@@ -12,7 +12,7 @@ const Algebra = (): JSX.Element => (
       values explicitly, some values are replaced with symbols to mark unknowns.
       In this way, the core structure of the expression can be manipulated
       without concern for the actual values. An understanding of these abstract
-      manipulations are key to success not only in mathematics, but also in
+      manipulations is key to success not only in mathematics, but also in
       logic, philosophy, and communication.
     </p>
     <h3>
