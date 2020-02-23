@@ -1,5 +1,5 @@
 import React from 'react';
-import { routeTo } from '../../../Routes';
+import { path } from '../../../Routes';
 import IntegerExponents from './01_preliminaries/IntegerExponents';
 import { Link } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ const Preliminaries = () => (
     </p>
     <ol>
       <li>
-        <Link to={routeTo(IntegerExponents)}>Integer Exponents</Link>: The
+        <Link to={path(IntegerExponents)}>Integer Exponents</Link>: The
         properties of exponents that are most common in algebraic expressions.
         This section focuses on positive integers for simplicity, and other
         exponent types are covered later.

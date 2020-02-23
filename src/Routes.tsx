@@ -9,7 +9,7 @@ import IntegerExponents from './pages/classes/alg/01_preliminaries/IntegerExpone
 import Sandbox from './pages/Sandbox';
 
 const Routes = (props: { routes: RouteObject[] }): JSX.Element => (
-  <div>{props.routes.map(element => route(element, ''))}</div>
+  <div>{props.routes.map(element => recursiveRoute(element, ''))}</div>
 );
 
 export class RouteObject {
@@ -54,75 +54,80 @@ export const routes: RouteObject[] = [
 
 /**
  * Returns the absolute path to the component, if it exists. Otherwise, returns
- * the absolute path to 404.
+ * the absolute path to 404. Used globally to generate paths in links.
  * @param component The component to route to
+ * @param routeObjects may contain RouteObject corresponding to component
+ * @param pathTo404 path to return in case there is no corresponding RouteObject
  */
-export function routeTo(
+export function path(
   component: () => JSX.Element,
-  routeList = routes,
+  routeObjects = routes,
   pathTo404 = '',
 ): string {
-  return routeOr404(componentRoute(component, routeList), pathTo404);
+  let potentialPath = pathHelper(component, '', routeObjects);
+  return potentialPath !== null ? potentialPath : pathTo404;
 }
 
 /**
- * Returns the given route if it's defined, otherwise returns the path to 404.
- * @param route The potentially-defined route
+ * Searches recursively through `routeObjects`, looking for an object whose
+ * component matches `component`. If one is found, returns the path to that
+ * `routeObject`. Else, returns null.
+ * @param component the component to path to
+ * @param partialPath the path generated so far
+ * @param routeObjects
+ * @return path to component, or null if no match found
  */
-function routeOr404(route: string | undefined, pathTo404: string): string {
-  if (route === undefined) return pathTo404;
-  return route;
-}
-
-/**
- * @param component The component to route to
- * @returns the path to the given component, if it exists, or undefined
- */
-function componentRoute(
+function pathHelper(
   component: () => JSX.Element,
-  routes: RouteObject[],
-): string | undefined {
-  return componentRouteHelper(component, '', routes);
-}
-
-function componentRouteHelper(
-  component: () => JSX.Element,
-  path: string,
-  routes: RouteObject[],
-): string | undefined {
-  let basePath = path;
-  for (let route of routes) {
-    path = `${basePath}/${route.path}`;
-    if (route.component === component) return path;
-    let childrenResult = componentRouteHelper(component, path, route.children);
-    if (childrenResult) return childrenResult;
+  partialPath: string,
+  routeObjects: RouteObject[],
+): string | null {
+  let basePath = partialPath; // must save base before repeatedly updating
+  for (let routeObject of routeObjects) {
+    partialPath = `${basePath}/${routeObject.path}`;
+    if (routeObject.component === component) return partialPath; // found match
+    // no match here, search children of this RouteObject
+    let childrenResult = pathHelper(
+      component,
+      partialPath,
+      routeObject.children,
+    );
+    if (childrenResult !== null) return childrenResult;
+    // no match in these children, start again with next element in list
   }
-  return undefined;
+  return null;
 }
 
 /**
- * Returns the JSX Element (HTML components) for this RouteObject and its children
- * @param element
+ * Returns a div containing a `Route` for each of this `RouteObject` and this
+ * `RouteObject`'s descendants
+ * @param routeObject
  * @param basePath
  */
-function route(element: RouteObject, basePath: string): JSX.Element {
-  let fullPath = `${basePath}/${element.path}`;
+function recursiveRoute(routeObject: RouteObject, basePath: string): JSX.Element {
+  let fullPath = `${basePath}/${routeObject.path}`;
   return (
-    <div key={element.id}>
-      {element.component ? routeFor(element, fullPath) : ''}
-      {element.children.map(child => route(child, fullPath))}
+    <div key={routeObject.id}>
+      {routeObject.component ? route(routeObject, fullPath) : ''}
+      {routeObject.children.map(child => recursiveRoute(child, fullPath))}
     </div>
   );
 }
 
-function routeFor(element: RouteObject, fullPath: string): JSX.Element {
+/**
+ * Returns the `Route` corresponding to the given `RouteObject` and `path`.
+ * Does not return the route for any children
+ * @param routeObject
+ * @param path
+ * @precondition `typeof(routeObject.component) === '() => JSX.Element'`
+ */
+function route(routeObject: RouteObject, path: string): JSX.Element {
   return (
     <Route
-      key={element.id}
+      key={routeObject.id}
       exact
-      path={fullPath}
-      // Ternary just to quiet type-checker. Check is done in route method
-      component={element.component ? element.component : undefined}
+      path={path}
+      component={routeObject.component as () => JSX.Element}
     ></Route>
   );
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter } from 'react-router-dom';
-import Routes, { routeTo, RouteObject } from './Routes';
+import Routes, { path, RouteObject } from './Routes';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
@@ -15,7 +15,7 @@ it('renders without crashing', () => {
 
 describe('routeTo', () => {
   it('navigates to 404 on empty routes', () => {
-    let sut = routeTo(() => <></>, [], '404');
+    let sut = path(() => <></>, [], '404');
     expect(sut).toBe('404');
   });
 
@@ -26,7 +26,7 @@ describe('routeTo', () => {
       new RouteObject('2', 'Home', 'homePath', null, []),
     ];
 
-    let sut = routeTo(() => <></>, routes, '404');
+    let sut = path(() => <></>, routes, '404');
 
     expect(sut).toEqual('404');
   });
@@ -40,7 +40,7 @@ describe('routeTo', () => {
       new RouteObject('2', 'Home', 'homePath', component, []),
     ];
 
-    let sut = routeTo(component, routes);
+    let sut = path(component, routes);
 
     expect(sut).toBe('/homePath');
   });
@@ -67,7 +67,7 @@ describe('routeTo', () => {
       ]),
     ];
 
-    let sut = routeTo(component, routes);
+    let sut = path(component, routes);
 
     expect(sut).toBe('/A/B/C');
   });

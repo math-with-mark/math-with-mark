@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, HashRouter } from 'react-router-dom';
-import { routeTo } from '../../Routes';
+import { path } from '../../Routes';
 import Preliminaries from './alg/Preliminaries';
 import IntegerExponents from './alg/01_preliminaries/IntegerExponents';
 
@@ -16,7 +16,7 @@ const Algebra = (): JSX.Element => (
       logic, philosophy, and communication.
     </p>
     <h3>
-      <Link to={routeTo(Preliminaries)}>Preliminaries</Link>
+      <Link to={path(Preliminaries)}>Preliminaries</Link>
     </h3>
     <p>
       In this chapter we focus on properties of expressions used frequently in
@@ -26,7 +26,7 @@ const Algebra = (): JSX.Element => (
     <ul>
       <li>
         <p>
-          <Link to={routeTo(IntegerExponents)}>Integer Exponents</Link>: The
+          <Link to={path(IntegerExponents)}>Integer Exponents</Link>: The
           properties of exponents that are most common in algebraic expressions.
         </p>
       </li>
