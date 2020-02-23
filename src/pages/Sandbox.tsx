@@ -1,9 +1,9 @@
 import React from 'react';
 
-import MathQuill, { addStyles as addMathQuillStyles } from 'react-mathquill';
+import { addStyles, EditableMathField } from 'react-mathquill';
 
-addMathQuillStyles();
+addStyles();
 
-const Sandbox = () => <MathQuill latex="a^2+b^2=c^2" />;
+const Sandbox = () => <EditableMathField latex="a^2+b^2=c^2" />;
 
 export default Sandbox;
