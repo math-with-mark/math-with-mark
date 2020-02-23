@@ -1,62 +1,67 @@
 import React from 'react';
 
+import * as mathjs from 'mathjs';
 import { addStyles, EditableMathField, MathField } from 'react-mathquill';
 
 addStyles();
 
-interface State {
-  latex: string
-}
+const initialLatex = '3^{2} + 4^{2}';
 
-const Sandbox = (props?: State): JSX.Element => (
-    <EditableMathField
-    latex={props ? props.latex : ''}
-    onChange={mathField => {
-      console.log(mathField.latex())
-    }}
-    />
-)
+const Sandbox = (): JSX.Element => <EditableMathExample />;
 
-export default Sandbox
-
-
-const initialLatex =
-  '\\cos\\left(A\\right)=\\frac{b^2+c^2-a^2}{2\\cdot b\\cdot c}'
+export default Sandbox;
 
 export class EditableMathExample extends React.Component<any, any> {
   mathQuillEl: null | MathField;
   resetField: () => void;
   constructor(props: any) {
-    super(props)
+    super(props);
 
     this.state = {
-      latex: initialLatex,
-      text: 'cos(A)=(b^2+c^2-a^2)/(2*b*c)',
-    }
+      latex: initialLatex, // used for initial population
+      text: undefined, // automatically filled in on mount
+    };
 
-    this.mathQuillEl = null
+    this.mathQuillEl = null;
 
     this.resetField = () => {
-      (this.mathQuillEl as MathField).latex(initialLatex)
-    }
+      (this.mathQuillEl as MathField).latex(initialLatex);
+    };
+  }
+
+  /**
+   * Update state, including property for evaluation of text as an expression
+   * @param state The partial new state
+   */
+  setState(state: any) {
+    state.simplified = (() => {
+      let result = 'Invalid expression';
+      try {
+        result = mathjs.evaluate(state.text); // sometimes returns an object
+      } catch (err) {
+        // do nothing, invalid expression
+      }
+      return result.toString(); // must be cast to string, cannot return object
+    })();
+    super.setState(state);
   }
 
   render() {
-    console.log(this)
     return (
       <div>
         Math field:{' '}
         <EditableMathField
           latex={this.state.latex}
           onChange={mathField => {
-            const latex = mathField.latex()
-            const text = (mathField as any).text()
-            console.log('latex changed:', latex)
-            console.log('text changed:', text)
-            this.setState({ latex, text })
+            const latex = mathField.latex();
+            const text = (mathField as any).text();
+            this.setState({ latex, text });
           }}
           mathquillDidMount={el => {
-            this.mathQuillEl = el
+            this.mathQuillEl = el;
+            let latex = el.latex();
+            let text = (el as any).text();
+            this.setState({ latex, text });
           }}
         />
         <div className="result-container">
@@ -67,8 +72,9 @@ export class EditableMathExample extends React.Component<any, any> {
           <span>Raw text:</span>
           <span className="result-latex">{this.state.text}</span>
         </div>
+        <p>Answer: {this.state.simplified}</p>
         <button onClick={this.resetField}>Reset field</button>
       </div>
-    )
+    );
   }
 }
