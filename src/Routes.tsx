@@ -69,7 +69,7 @@ export function routeTo(
  * Returns the given route if it's defined, otherwise returns the path to 404.
  * @param route The potentially-defined route
  */
-function routeOr404(route: string | undefined, pathTo404: string):string {
+function routeOr404(route: string | undefined, pathTo404: string): string {
   if (route === undefined) return pathTo404;
   return route;
 }
