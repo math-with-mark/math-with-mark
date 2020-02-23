@@ -6,6 +6,7 @@ import About from './pages/About';
 import Algebra from './pages/classes/Algebra';
 import Preliminaries from './pages/classes/alg/Preliminaries';
 import IntegerExponents from './pages/classes/alg/01_preliminaries/IntegerExponents';
+import Sandbox from './pages/Sandbox';
 
 const Routes = (props: { routes: RouteObject[] }): JSX.Element => (
   <div>{props.routes.map(element => route(element, ''))}</div>
@@ -48,6 +49,7 @@ export const routes: RouteObject[] = [
       ]),
     ]),
   ]),
+  new RouteObject('6', 'Sandbox', 'Sandbox', Sandbox, []),
 ];
 
 /**
@@ -67,7 +69,7 @@ export function routeTo(
  * Returns the given route if it's defined, otherwise returns the path to 404.
  * @param route The potentially-defined route
  */
-function routeOr404(route: string | undefined, pathTo404: string) {
+function routeOr404(route: string | undefined, pathTo404: string):string {
   if (route === undefined) return pathTo404;
   return route;
 }
