@@ -7,43 +7,50 @@ addStyles();
 
 const initialLatex = '3^{2} + 4^{2}';
 
-const Sandbox = (): JSX.Element => <EditableMathExample />;
+const Sandbox = (): JSX.Element => <EditableMathExample latex={initialLatex} />;
 
 export default Sandbox;
 
 export class EditableMathExample extends React.Component<any, any> {
-  mathQuillEl: null | MathField;
-  resetField: () => void;
-  constructor(props: any) {
+  mathField: null | MathField;
+  initialLatex: string
+  constructor(props: { latex: string }) {
     super(props);
-
+    this.initialLatex = props.latex; // save for resetting
     this.state = {
       latex: initialLatex, // used for initial population
-      text: undefined, // automatically filled in on mount
     };
-
-    this.mathQuillEl = null;
-
-    this.resetField = () => {
-      (this.mathQuillEl as MathField).latex(initialLatex);
-    };
+    this.mathField = null;
   }
 
-  /**
-   * Update state, including property for evaluation of text as an expression
-   * @param state The partial new state
-   */
-  setState(state: any) {
-    state.simplified = (() => {
-      let result = 'Invalid expression';
-      try {
-        result = mathjs.evaluate(state.text); // sometimes returns an object
-      } catch (err) {
-        // do nothing, invalid expression
-      }
-      return result.toString(); // must be cast to string, cannot return object
-    })();
-    super.setState(state);
+  reset = (): void => {
+    (this.mathField as MathField).latex(initialLatex);
+  }
+
+  onChange = (): void => {
+    this.updateState();
+  }
+
+  mathQuillDidMount = (mathField: MathField): void => {
+    this.mathField = mathField;
+    this.updateState();
+  }
+
+  updateState(): void {
+    const latex = (this.mathField as MathField).latex();
+    const text = (this.mathField as any).text();
+    const evaluation = this.tryEvaluate(text as string);
+    super.setState({ latex, text, evaluation });
+  }
+
+  tryEvaluate(text: string): string {
+    let evaluation = 'Invalid expression';
+    try {
+      evaluation = mathjs.evaluate(text);
+    } catch (err) {
+      // do nothing, invalid expression
+    }
+    return evaluation.toString();
   }
 
   render() {
@@ -52,17 +59,8 @@ export class EditableMathExample extends React.Component<any, any> {
         Math field:{' '}
         <EditableMathField
           latex={this.state.latex}
-          onChange={mathField => {
-            const latex = mathField.latex();
-            const text = (mathField as any).text();
-            this.setState({ latex, text });
-          }}
-          mathquillDidMount={el => {
-            this.mathQuillEl = el;
-            let latex = el.latex();
-            let text = (el as any).text();
-            this.setState({ latex, text });
-          }}
+          onChange={this.onChange}
+          mathquillDidMount={this.mathQuillDidMount} 
         />
         <div className="result-container">
           <span>Raw latex:</span>
@@ -72,8 +70,8 @@ export class EditableMathExample extends React.Component<any, any> {
           <span>Raw text:</span>
           <span className="result-latex">{this.state.text}</span>
         </div>
-        <p>Answer: {this.state.simplified}</p>
-        <button onClick={this.resetField}>Reset field</button>
+        <p>Answer: {this.state.evaluation}</p>
+        <button onClick={this.reset}>Reset</button>
       </div>
     );
   }
