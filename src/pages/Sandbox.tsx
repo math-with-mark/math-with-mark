@@ -2,28 +2,35 @@ import React from 'react';
 import { addStyles, EditableMathField, MathField } from 'react-mathquill';
 
 import { tryEvaluate } from '../ts/math';
+import Latex from '../Latex';
 
 addStyles();
 
-const initialLatex = '3^{2} + 4^{2}';
-
-/** Wraps StatefulSandbox for generated routing */
-const Sandbox = (): JSX.Element => <StatefulSandbox latex={initialLatex} />;
+/** Wraps StatefulSandbox for procedurally-generated routing */
+const Sandbox = (): JSX.Element => <StatefulSandbox />;
 
 class StatefulSandbox extends React.Component<any, any> {
   mathField: MathField;
-  initialLatex: string;
-  constructor(props: { latex: string }) {
+  expressionLatex: string;
+  termLatex: string;
+  answerLatex: string;
+  constructor(props?: any) {
     super(props);
-    this.initialLatex = props.latex; // save for resetting
     this.state = {
-      latex: initialLatex, // used for initial population
+      latex: '', // used for initial population
     };
     this.mathField = (null as unknown) as MathField; // assigned on mount
+    this.expressionLatex = this.termLatex = this.answerLatex = ''; // assigned in `new`
+    this.new();
   }
 
-  reset = (): void => {
-    this.mathField.latex(initialLatex);
+  new = (): void => {
+    if (this.mathField) this.mathField.latex('');
+    let a = Math.ceil(Math.random() * 10);
+    let b = Math.ceil(Math.random() * 10);
+    this.expressionLatex = `${a}x^{${b}}`;
+    this.termLatex = `x^{${b}}`;
+    this.answerLatex = `${a}`;
   };
 
   onChange = (): void => {
@@ -42,25 +49,30 @@ class StatefulSandbox extends React.Component<any, any> {
     super.setState({ latex, text, evaluation });
   }
 
+  isCorrect = (): boolean => {
+    return this.state.text === this.answerLatex;
+  };
+
   render() {
     return (
       <div>
-        Math field:{' '}
+        <p>
+          What is the coefficient of <Latex inline content={this.termLatex} />{' '}
+          in <Latex inline content={this.expressionLatex} />?
+        </p>
+        Your answer:{' '}
         <EditableMathField
           latex={this.state.latex}
           onChange={this.onChange}
           mathquillDidMount={this.mathQuillDidMount}
         />
         <div className="result-container">
-          <span>Raw latex:</span>
-          <span className="result-latex">{this.state.latex}</span>
+          <p>
+            Your answer of '{this.state.text}' is{' '}
+            {this.isCorrect() ? 'correct!' : 'incorrect.'}
+          </p>
         </div>
-        <div className="result-container">
-          <span>Raw text:</span>
-          <span className="result-latex">{this.state.text}</span>
-        </div>
-        <p>Answer: {this.state.evaluation}</p>
-        <button onClick={this.reset}>Reset</button>
+        <button onClick={this.new}>New Challenge</button>
       </div>
     );
   }
