@@ -1,5 +1,4 @@
 import * as mathjs from 'mathjs';
-import { cast } from './cast';
 
 /**
  * Returns the coefficient of terms of the form (COEFFICIENT)(SYMBOL)^(POWER).
@@ -17,9 +16,8 @@ export function coefficient(
   power: number,
 ): number {
   // node is OperatorNode from contract, either '+' or '*'
-  let op = cast<string>(root.op, '');
   let children = args(root);
-  if (op === '+') {
+  if (root.op === '+') {
     let coeff = 0;
     coeff += coefficient(children[0], symbol, power);
     coeff += coefficient(children[1], symbol, power);
@@ -41,7 +39,7 @@ export function coefficient(
  * Returns [] when there are no children present
  */
 function args(node: mathjs.MathNode): mathjs.MathNode[] {
-  return cast<mathjs.MathNode[]>(node.args, []);
+  return node.args as mathjs.MathNode[];
 }
 
 /**
