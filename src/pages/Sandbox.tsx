@@ -19,7 +19,7 @@ class StatefulSandbox extends React.Component<any, any> {
     this.state = {
       latex: initialLatex, // used for initial population
     };
-    this.mathField = null as unknown as MathField; // assigned on mount
+    this.mathField = (null as unknown) as MathField; // assigned on mount
   }
 
   reset = (): void => {
@@ -37,8 +37,8 @@ class StatefulSandbox extends React.Component<any, any> {
 
   updateState(): void {
     const latex = this.mathField.latex();
-    const text = (this.mathField as any).text();
-    const evaluation = tryEvaluate(text as string);
+    const text = this.mathField.text();
+    const evaluation = tryEvaluate(text);
     super.setState({ latex, text, evaluation });
   }
 
