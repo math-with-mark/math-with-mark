@@ -1,56 +1,45 @@
 import React from 'react';
-
-import * as mathjs from 'mathjs';
 import { addStyles, EditableMathField, MathField } from 'react-mathquill';
+
+import { tryEvaluate } from '../ts/math';
 
 addStyles();
 
 const initialLatex = '3^{2} + 4^{2}';
 
-const Sandbox = (): JSX.Element => <EditableMathExample latex={initialLatex} />;
+/** Wraps StatefulSandbox for generated routing */
+const Sandbox = (): JSX.Element => <StatefulSandbox latex={initialLatex} />;
 
-export default Sandbox;
-
-export class EditableMathExample extends React.Component<any, any> {
-  mathField: null | MathField;
-  initialLatex: string
+class StatefulSandbox extends React.Component<any, any> {
+  mathField: MathField;
+  initialLatex: string;
   constructor(props: { latex: string }) {
     super(props);
     this.initialLatex = props.latex; // save for resetting
     this.state = {
       latex: initialLatex, // used for initial population
     };
-    this.mathField = null;
+    this.mathField = null as unknown as MathField; // assigned on mount
   }
 
   reset = (): void => {
-    (this.mathField as MathField).latex(initialLatex);
-  }
+    this.mathField.latex(initialLatex);
+  };
 
   onChange = (): void => {
     this.updateState();
-  }
+  };
 
   mathQuillDidMount = (mathField: MathField): void => {
     this.mathField = mathField;
     this.updateState();
-  }
+  };
 
   updateState(): void {
-    const latex = (this.mathField as MathField).latex();
+    const latex = this.mathField.latex();
     const text = (this.mathField as any).text();
-    const evaluation = this.tryEvaluate(text as string);
+    const evaluation = tryEvaluate(text as string);
     super.setState({ latex, text, evaluation });
-  }
-
-  tryEvaluate(text: string): string {
-    let evaluation = 'Invalid expression';
-    try {
-      evaluation = mathjs.evaluate(text);
-    } catch (err) {
-      // do nothing, invalid expression
-    }
-    return evaluation.toString();
   }
 
   render() {
@@ -60,7 +49,7 @@ export class EditableMathExample extends React.Component<any, any> {
         <EditableMathField
           latex={this.state.latex}
           onChange={this.onChange}
-          mathquillDidMount={this.mathQuillDidMount} 
+          mathquillDidMount={this.mathQuillDidMount}
         />
         <div className="result-container">
           <span>Raw latex:</span>
@@ -76,3 +65,5 @@ export class EditableMathExample extends React.Component<any, any> {
     );
   }
 }
+
+export default Sandbox;

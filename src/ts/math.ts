@@ -43,3 +43,19 @@ export function coefficient(
 function args(node: mathjs.MathNode): mathjs.MathNode[] {
   return cast<mathjs.MathNode[]>(node.args, []);
 }
+
+/**
+ * Tries to evaluate the given algebraic expression. If the text is not able to
+ * be evaluated, returns 'Invalid expression'. Otherwise, returns the evaluation
+ * @param text The expression to be evaluated
+ * @return the evaluation, if possible, otherwise 'Invalid expression'
+ */
+export function tryEvaluate(text: string): string {
+  let evaluation = 'Invalid expression';
+  try {
+    evaluation = mathjs.evaluate(text); // may return object, or undefined
+  } catch (err) {
+    // do nothing, invalid expression
+  }
+  return evaluation ? evaluation.toString() : 'Invalid expression';
+}
