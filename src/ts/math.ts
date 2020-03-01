@@ -1,5 +1,4 @@
 import * as mathjs from 'mathjs';
-import { cast } from './cast';
 
 /**
  * Returns the coefficient of terms of the form (COEFFICIENT)(SYMBOL)^(POWER).
@@ -8,8 +7,7 @@ import { cast } from './cast';
  * symbol
  * @param root The root of the AST
  * @param symbol The symbol to evaluate
- * @param power The power to which the symbol is raised
- * @param coefficient The current coefficient (used in recursive calls)
+ * @param power The power to which `symbol` is raised
  */
 export function coefficient(
   root: mathjs.MathNode,
@@ -17,29 +15,41 @@ export function coefficient(
   power: number,
 ): number {
   // node is OperatorNode from contract, either '+' or '*'
-  let op = cast<string>(root.op, '');
-  let children = args(root);
-  if (op === '+') {
-    let coeff = 0;
-    coeff += coefficient(children[0], symbol, power);
-    coeff += coefficient(children[1], symbol, power);
-    return coeff;
+  let leftChild = args(root)[0];
+  let rightChild = args(root)[1];
+  if (root.op === '+') {
+    return (
+      coefficient(leftChild, symbol, power) +
+      coefficient(rightChild, symbol, power)
+    );
   }
-
-  // op === '*'. Fields are guaranteed from Ax^B structure
-  if (
-    args(children[1])[0].name === symbol &&
-    args(children[1])[1].value === power
-  ) {
-    return children[0].value;
+  // op === '*', left child is coeff, right child is exp node
+  let actualSymbol = args(rightChild)[0].name;
+  let actualPower = args(rightChild)[1].value;
+  if (actualSymbol === symbol && actualPower === power) {
+    return leftChild.value;
   }
+  // not a match, this term does not contribute to coefficient
   return 0;
 }
 
-/**
- * Get the children of this node, aka its args.
- * Returns [] when there are no children present
- */
+/** Wrapper to simplify cast of node.args to mathjs.MathNode */
 function args(node: mathjs.MathNode): mathjs.MathNode[] {
-  return cast<mathjs.MathNode[]>(node.args, []);
+  return node.args as mathjs.MathNode[];
+}
+
+/**
+ * Tries to evaluate the given algebraic expression. If the text is not able to
+ * be evaluated, returns 'Invalid expression'. Otherwise, returns the evaluation
+ * @param text The expression to be evaluated
+ * @return the evaluation, if possible, otherwise 'Invalid expression'
+ */
+export function tryEvaluate(text: string): string {
+  let evaluation = 'Invalid expression';
+  try {
+    evaluation = mathjs.evaluate(text); // may return object, or undefined
+  } catch (err) {
+    // do nothing, invalid expression
+  }
+  return evaluation ? evaluation.toString() : 'Invalid expression';
 }

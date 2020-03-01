@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { RouteObject } from './Routes';
 
 /**
- * Procedurally generated, nested, unordered list of internal links
+ * Generates nested, unordered list of internal links
  */
 const Navigation = (props: { routes: RouteObject[] }): JSX.Element => (
   <nav>
@@ -11,7 +11,7 @@ const Navigation = (props: { routes: RouteObject[] }): JSX.Element => (
   </nav>
 );
 
-/* Return component to be rendered */
+/** Returns component to be rendered */
 function link(element: RouteObject, basePath: string): JSX.Element {
   let fullPath = `${basePath}/${element.path}`;
   return (
