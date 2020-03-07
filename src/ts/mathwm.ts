@@ -115,13 +115,14 @@ function tryParse(mathText: string): mathjs.MathNode | null {
  * If the given expression cannot be parsed or the rule cannot be applied,
  * returns `mathText` as given
  */
-export function mwmStep(mathText: string, rule: Rule): string {
+export function applyRule(mathText: string, rule: Rule): string {
   let node: mathjs.MathNode | null = tryParse(mathText);
   if (node === null) return mathText;
 
-  let evaluation = rulesToFunctions[rule](node).toString();
-  evaluation = evaluation.replace(/ /g, ''); // remove all spaces
-  return evaluation;
+  node = rulesToFunctions[rule](node);
+  let s = node.toString();
+  s = s.replace(/ /g, ''); // for ease of writing tests
+  return s;
 }
 
 /**

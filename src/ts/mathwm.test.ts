@@ -31,25 +31,23 @@ describe('coefficient', () => {
 });
 
 describe('evaluate product of one variable', () => {
-  let mwmStep = mathwm.mwmStep;
+  let sut = (mathText: string): string => {
+    return mathwm.applyRule(mathText, Rule.ProductOfOneVariable);
+  };
   it('works in nominal case', () => {
-    let sut = 'x^2*x^3';
-    expect(mwmStep(sut, Rule.ProductOfOneVariable)).toBe('x^(2+3)');
+    expect(sut('x^2*x^3')).toBe('x^(2+3)');
   });
 
   it('returns given text when given text cannot be parsed', () => {
-    let sut = '+';
-    expect(mwmStep(sut, Rule.ProductOfOneVariable)).toBe('+');
+    expect(sut('+')).toBe('+');
   });
 
   it('returns given text when rule cannot be applied', () => {
-    let sut = '1+4';
-    expect(mwmStep(sut, Rule.ProductOfOneVariable)).toBe('1+4');
+    expect(sut('1+4')).toBe('1+4');
   });
 
   it('does not mistakenly evaluate addition', () => {
-    let sut = '(x+2)+(x+3)';
-    expect(mwmStep(sut, Rule.ProductOfOneVariable)).toBe('(x+2)+(x+3)');
+    expect(sut('(x+2)+(x+3)')).toBe('(x+2)+(x+3)');
   });
 });
 
