@@ -1,7 +1,7 @@
 import React from 'react';
 import { addStyles, EditableMathField, MathField } from 'react-mathquill';
 
-import { tryEvaluate } from '../ts/math';
+import * as mwmMath from '../ts/math';
 import Latex from '../Latex';
 
 addStyles();
@@ -45,12 +45,12 @@ class StatefulSandbox extends React.Component<any, any> {
   updateState(): void {
     const latex = this.mathField.latex();
     const text = this.mathField.text();
-    const evaluation = tryEvaluate(text);
+    const evaluation = mwmMath.tryEvaluateAlgebraic(text);
     super.setState({ latex, text, evaluation });
   }
 
   isCorrect = (): boolean => {
-    return this.state.text === this.answerLatex;
+    return this.state.evaluation === this.answerLatex;
   };
 
   render() {
@@ -70,6 +70,22 @@ class StatefulSandbox extends React.Component<any, any> {
           <p>
             Your answer of '{this.state.text}' is{' '}
             {this.isCorrect() ? 'correct!' : 'incorrect.'}
+          </p>
+        </div>
+        <div className="result-container">
+          <p>
+            {' '}
+            Your answer arithmetically evaluates to:{' '}
+            {mwmMath.tryEvaluateArithmetic(
+              this.state.text ? this.state.text : '0',
+            ).toString()}
+          </p>
+        </div>
+        <div className="result-container">
+          <p>
+            {' '}
+            Your answer algebraically evaluates to:{' '}
+            {mwmMath.tryEvaluateAlgebraic(this.state.text ? this.state.text : '0').toString()}
           </p>
         </div>
         <button onClick={this.new}>New Challenge</button>

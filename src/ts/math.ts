@@ -39,15 +39,30 @@ function args(node: mathjs.MathNode): mathjs.MathNode[] {
 }
 
 /**
- * Tries to evaluate the given algebraic expression. If the text is not able to
+ * Tries to evaluate the arithmetic expression. If `mathText` is not able to
  * be evaluated, returns 'Invalid expression'. Otherwise, returns the evaluation
- * @param text The expression to be evaluated
+ * @param mathText The expression to be evaluated, as interpreted by mathjs
  * @return the evaluation, if possible, otherwise 'Invalid expression'
  */
-export function tryEvaluate(text: string): string {
-  let evaluation = 'Invalid expression';
+export function tryEvaluateArithmetic(mathText: string): string {
+  return tryMath(mathText, true);
+}
+
+/**
+ * Tries to evaluate the algebraic expression. If `mathText` is not able to
+ * be evaluated, returns 'Invalid expression'. Otherwise, returns the evaluation
+ * @param mathText The expression to be evaluated, as interpreted by mathjs
+ * @return the evaluation, if possible, otherwise 'Invalid expression'
+ */
+export function tryEvaluateAlgebraic(mathText: string): string {
+  return tryMath(mathText, false);
+}
+
+function tryMath(mathText: string, arithmetic: boolean): string {
+  let func = arithmetic ? mathjs.evaluate : mathjs.simplify;
+  let evaluation: any = undefined;
   try {
-    evaluation = mathjs.evaluate(text); // may return object, or undefined
+    evaluation = func(mathText); // may return object or undefined
   } catch (err) {
     // do nothing, invalid expression
   }

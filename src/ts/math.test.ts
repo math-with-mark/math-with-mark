@@ -1,7 +1,9 @@
 import * as mathjs from 'mathjs';
+import * as mwmMath from './math';
 import { coefficient, tryEvaluate } from './math';
 
 describe('coefficient', () => {
+  let coefficient = mwmMath.coefficient;
   it('works in the simplest case', () => {
     let sut = mathjs.parse('1x^2');
     expect(coefficient(sut, 'x', 2)).toBe(1);
@@ -17,7 +19,7 @@ describe('coefficient', () => {
     expect(coefficient(sut, 'x', 2)).toBe(5);
   });
 
-  it('only gets powers of the given symbol', () => {
+  it('only gets powers of the given variable', () => {
     let sut = mathjs.parse('2x^2 + 4y^2 + 1x^2');
     expect(coefficient(sut, 'x', 2)).toBe(3);
   });
@@ -28,7 +30,8 @@ describe('coefficient', () => {
   });
 });
 
-describe('tryEvaluate', () => {
+describe('tryEvaluateArithmetic', () => {
+  let tryEvaluate = mwmMath.tryEvaluateArithmetic;
   it("Evaluates empty string to 'Invalid expression'", () => {
     let sut = '';
     expect(tryEvaluate(sut)).toBe('Invalid expression');
