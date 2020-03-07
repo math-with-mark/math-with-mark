@@ -1,7 +1,7 @@
 import React from 'react';
 import { addStyles, EditableMathField, MathField } from 'react-mathquill';
 
-import * as mwmMath from '../ts/math';
+import * as mathwm from '../ts/mathwm';
 import Latex from '../Latex';
 
 addStyles();
@@ -45,7 +45,7 @@ class StatefulSandbox extends React.Component<any, any> {
   updateState(): void {
     const latex = this.mathField.latex();
     const text = this.mathField.text();
-    const evaluation = mwmMath.tryEvaluateAlgebraic(text);
+    const evaluation = mathwm.tryEvaluateAlgebraic(text);
     super.setState({ latex, text, evaluation });
   }
 
@@ -76,16 +76,18 @@ class StatefulSandbox extends React.Component<any, any> {
           <p>
             {' '}
             Your answer arithmetically evaluates to:{' '}
-            {mwmMath.tryEvaluateArithmetic(
-              this.state.text ? this.state.text : '0',
-            ).toString()}
+            {mathwm
+              .tryEvaluateArithmetic(this.state.text ? this.state.text : '0')
+              .toString()}
           </p>
         </div>
         <div className="result-container">
           <p>
             {' '}
             Your answer algebraically evaluates to:{' '}
-            {mwmMath.tryEvaluateAlgebraic(this.state.text ? this.state.text : '0').toString()}
+            {mathwm
+              .tryEvaluateAlgebraic(this.state.text ? this.state.text : '0')
+              .toString()}
           </p>
         </div>
         <button onClick={this.new}>New Challenge</button>

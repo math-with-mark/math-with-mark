@@ -1,9 +1,9 @@
 import * as mathjs from 'mathjs';
-import * as mwmMath from './math';
+import * as mathwm from './mathwm';
 import Rule from './rules';
 
 describe('coefficient', () => {
-  let coefficient = mwmMath.coefficient;
+  let coefficient = mathwm.coefficient;
   it('works in the simplest case', () => {
     let sut = mathjs.parse('1x^2');
     expect(coefficient(sut, 'x', 2)).toBe(1);
@@ -31,7 +31,7 @@ describe('coefficient', () => {
 });
 
 describe('evaluate product of one variable', () => {
-  let mwmStep = mwmMath.mwmStep;
+  let mwmStep = mathwm.mwmStep;
   it('works in nominal case', () => {
     let sut = 'x^2*x^3';
     expect(mwmStep(sut, Rule.ProductOfOneVariable)).toBe('x^(2+3)');
@@ -54,7 +54,7 @@ describe('evaluate product of one variable', () => {
 });
 
 describe('tryEvaluateArithmetic', () => {
-  let tryEvaluate = mwmMath.tryEvaluateArithmetic;
+  let tryEvaluate = mathwm.tryEvaluateArithmetic;
   it("Evaluates empty string to 'Invalid expression'", () => {
     let sut = '';
     expect(tryEvaluate(sut)).toBe('Invalid expression');
