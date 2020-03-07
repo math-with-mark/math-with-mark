@@ -1,4 +1,32 @@
 import * as mathjs from 'mathjs';
+import Rule from './rules';
+
+/** Used for functions that apply one rule to an expression and return the result */
+type StepFunction = (n: mathjs.MathNode) => mathjs.MathNode;
+
+/** Maps each rule to a function that applies that rule to a given math node */
+const rulesToFunctions: Record<Rule, StepFunction> = {
+  [Rule.ProductOfOneVariable]: productOfOneVariable,
+};
+
+function productOfOneVariable(node: mathjs.MathNode): mathjs.MathNode {
+  // If this is a product of two exponentiations (nominal case)
+  if (
+    node.op === '*' &&
+    node.args?.[0].op === '^' &&
+    node.args?.[1].op === '^'
+  ) {
+    let leftVariable = node.args?.[0].args?.[0].name;
+    let rightVariable = node.args?.[1].args?.[0].name;
+    // If both variables are defined and equal, assume
+    if (leftVariable !== undefined && leftVariable === rightVariable) {
+      let leftExponent: number = node.args?.[0].args?.[1].value;
+      let rightExponent: number = node.args?.[1].args?.[1].value;
+      return mathjs.parse(`${leftVariable}^(${leftExponent}+${rightExponent})`);
+    }
+  }
+  return node;
+}
 
 /**
  * Returns the coefficient of terms of the form (COEFFICIENT)(SYMBOL)^(POWER).
@@ -67,4 +95,31 @@ function tryMath(mathText: string, arithmetic: boolean): string {
     // do nothing, invalid expression
   }
   return evaluation ? evaluation.toString() : 'Invalid expression';
+}
+
+function tryParse(mathText: string): mathjs.MathNode | null {
+  let node: mathjs.MathNode | null = null;
+  try {
+    node = mathjs.parse(mathText);
+  } catch (err) {
+    // do nothing, invalid text
+  }
+  return node;
+}
+
+/**
+ * Applies the given rule to the given expression
+ * @param mathText The string version of the expression in mathjs format
+ * @param rule The rule to apply
+ * @return the result of applying the given rule to the given expression.
+ * If the given expression cannot be parsed or the rule cannot be applied,
+ * returns `mathText` as given
+ */
+export function mwmStep(mathText: string, rule: Rule): string {
+  let node: mathjs.MathNode | null = tryParse(mathText);
+  if (node === null) return mathText;
+
+  let evaluation = rulesToFunctions[rule](node).toString();
+  evaluation = evaluation.replace(/ /g, ''); // remove all spaces
+  return evaluation;
 }

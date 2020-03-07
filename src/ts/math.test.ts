@@ -1,6 +1,6 @@
 import * as mathjs from 'mathjs';
 import * as mwmMath from './math';
-import { coefficient, tryEvaluate } from './math';
+import Rule from './rules';
 
 describe('coefficient', () => {
   let coefficient = mwmMath.coefficient;
@@ -27,6 +27,29 @@ describe('coefficient', () => {
   it('only gets power of the given degree', () => {
     let sut = mathjs.parse('1x^2 + 3x^3 + 2x^2 + 4x^3');
     expect(coefficient(sut, 'x', 3)).toBe(7);
+  });
+});
+
+describe('evaluate product of one variable', () => {
+  let mwmStep = mwmMath.mwmStep;
+  it('works in nominal case', () => {
+    let sut = 'x^2*x^3';
+    expect(mwmStep(sut, Rule.ProductOfOneVariable)).toBe('x^(2+3)');
+  });
+
+  it('returns given text when given text cannot be parsed', () => {
+    let sut = '+';
+    expect(mwmStep(sut, Rule.ProductOfOneVariable)).toBe('+');
+  });
+
+  it('returns given text when rule cannot be applied', () => {
+    let sut = '1+4';
+    expect(mwmStep(sut, Rule.ProductOfOneVariable)).toBe('1+4');
+  });
+
+  it('does not mistakenly evaluate addition', () => {
+    let sut = '(x+2)+(x+3)';
+    expect(mwmStep(sut, Rule.ProductOfOneVariable)).toBe('(x+2)+(x+3)');
   });
 });
 
