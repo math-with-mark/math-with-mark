@@ -4,29 +4,29 @@ import * as mathjs from 'mathjs';
  * Returns the coefficient of terms of the form (COEFFICIENT)(SYMBOL)^(POWER).
  *
  * CONTRACT: Expression must be of the form \sum{Ax^B}, A, B constant; x any
- * symbol
+ * variable
  * @param root The root of the AST
- * @param symbol The symbol to evaluate
- * @param power The power to which `symbol` is raised
+ * @param variable The variable to evaluate
+ * @param exponent The power to which the variable is raised
  */
 export function coefficient(
   root: mathjs.MathNode,
-  symbol: string,
-  power: number,
+  variable: string,
+  exponent: number,
 ): number {
   // node is OperatorNode from contract, either '+' or '*'
   let leftChild = args(root)[0];
   let rightChild = args(root)[1];
   if (root.op === '+') {
     return (
-      coefficient(leftChild, symbol, power) +
-      coefficient(rightChild, symbol, power)
+      coefficient(leftChild, variable, exponent) +
+      coefficient(rightChild, variable, exponent)
     );
   }
   // op === '*', left child is coeff, right child is exp node
-  let actualSymbol = args(rightChild)[0].name;
-  let actualPower = args(rightChild)[1].value;
-  if (actualSymbol === symbol && actualPower === power) {
+  let actualVariable = args(rightChild)[0].name;
+  let actualExponent = args(rightChild)[1].value;
+  if (actualVariable === variable && actualExponent === exponent) {
     return leftChild.value;
   }
   // not a match, this term does not contribute to coefficient
