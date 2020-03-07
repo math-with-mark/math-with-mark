@@ -123,3 +123,22 @@ export function mwmStep(mathText: string, rule: Rule): string {
   evaluation = evaluation.replace(/ /g, ''); // remove all spaces
   return evaluation;
 }
+
+/**
+ * Evaluates arithmetic inside an algebraic expression. Does not do any
+ * algebraic evaluation.
+ * @param node the expression to evaluate
+ * @return the arithmetically evaluated expression
+ */
+export function evaluateArithmetic(node: mathjs.MathNode): mathjs.MathNode {
+  let transformed = node.transform(function(node, path, parent) {
+    // if can be arithmetically evaluated
+    let arithmeticEvaluation = tryEvaluateArithmetic(node.toString());
+    if (arithmeticEvaluation !== 'Invalid expression') {
+      return mathjs.parse(arithmeticEvaluation);
+    } else {
+      return node;
+    }
+  });
+  return transformed;
+}

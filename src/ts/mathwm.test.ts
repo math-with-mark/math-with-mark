@@ -75,3 +75,24 @@ describe('tryEvaluateArithmetic', () => {
     expect(tryEvaluate(sut)).toBe('-1 + 3i');
   });
 });
+
+describe('evaluateArithmetic', () => {
+  // compare string representations, should be equal
+  let sut = (node: mathjs.MathNode): string => {
+    return mathwm.evaluateArithmetic(node).toString();
+  };
+  it('does not evaluate algebra', () => {
+    let node: mathjs.MathNode = mathjs.parse('x+x');
+    expect(sut(node)).toEqual('x + x');
+  });
+
+  it('does evaluate arithmetic', () => {
+    let node = mathjs.parse('1+2');
+    expect(sut(node)).toEqual('3');
+  });
+
+  it('evaluates arithmetic inside algebraic expression', () => {
+    let node = mathjs.parse('(1+1)*x');
+    expect(sut(node)).toEqual('2 * x');
+  });
+});
