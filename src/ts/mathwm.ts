@@ -1,6 +1,9 @@
 import * as mathjs from 'mathjs';
 import Rule from './rules';
 
+/** Type alias, we may change away from mathjs in the future */
+export type MathNode = mathjs.MathNode;
+
 /** Used for functions that apply one rule to an expression and return the result */
 type StepFunction = (n: mathjs.MathNode) => mathjs.MathNode;
 
@@ -9,7 +12,7 @@ const rulesToFunctions: Record<Rule, StepFunction> = {
   [Rule.ProductOfOneVariable]: productOfOneVariable,
 };
 
-function productOfOneVariable(node: mathjs.MathNode): mathjs.MathNode {
+function productOfOneVariable(node: MathNode): MathNode {
   // If this is a product of two exponentiations (nominal case)
   if (
     node.op === '*' &&
@@ -38,7 +41,7 @@ function productOfOneVariable(node: mathjs.MathNode): mathjs.MathNode {
  * @param exponent The power to which the variable is raised
  */
 export function coefficient(
-  root: mathjs.MathNode,
+  root: MathNode,
   variable: string,
   exponent: number,
 ): number {
@@ -61,9 +64,9 @@ export function coefficient(
   return 0;
 }
 
-/** Wrapper to simplify cast of node.args to mathjs.MathNode */
-function args(node: mathjs.MathNode): mathjs.MathNode[] {
-  return node.args as mathjs.MathNode[];
+/** Wrapper to simplify cast of node.args to MathNode[] */
+function args(node: MathNode): MathNode[] {
+  return node.args as MathNode[];
 }
 
 /**
@@ -97,8 +100,8 @@ function tryMath(mathText: string, arithmetic: boolean): string {
   return evaluation ? evaluation.toString() : 'Invalid expression';
 }
 
-function tryParse(mathText: string): mathjs.MathNode | null {
-  let node: mathjs.MathNode | null = null;
+function tryParse(mathText: string): MathNode | null {
+  let node: MathNode | null = null;
   try {
     node = mathjs.parse(mathText);
   } catch (err) {
@@ -109,14 +112,14 @@ function tryParse(mathText: string): mathjs.MathNode | null {
 
 /**
  * Applies the given rule to the given expression
- * @param mathText The string version of the expression in mathjs format
+ * @param mathText The expression (to be parsed)
  * @param rule The rule to apply
  * @return the result of applying the given rule to the given expression.
  * If the given expression cannot be parsed or the rule cannot be applied,
  * returns `mathText` as given
  */
 export function applyRule(mathText: string, rule: Rule): string {
-  let node: mathjs.MathNode | null = tryParse(mathText);
+  let node: MathNode | null = tryParse(mathText);
   if (node === null) return mathText;
 
   node = rulesToFunctions[rule](node);
@@ -131,7 +134,7 @@ export function applyRule(mathText: string, rule: Rule): string {
  * @param node the expression to evaluate
  * @return the arithmetically evaluated expression
  */
-export function evaluateArithmetic(node: mathjs.MathNode): mathjs.MathNode {
+export function evaluateArithmetic(node: MathNode): MathNode {
   let transformed = node.transform(function(node, path, parent) {
     // if can be arithmetically evaluated
     // and none of its children are division nodes
