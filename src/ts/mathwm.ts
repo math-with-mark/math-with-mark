@@ -7,8 +7,15 @@ export type MathNode = mathjs.MathNode;
 /** Used for functions that apply one rule to an expression and return the result */
 type RuleApplicationFunction = (n: MathNode) => MathNode;
 
+interface Step {
+  node: MathNode;
+  rule: Rule;
+}
+
 /** Maps each rule to a function that applies that rule to a given math node */
 const rulesToFunctions: Record<Rule, RuleApplicationFunction> = {
+  [Rule.None]: node => node,
+  [Rule.Arithmetic]: evaluateArithmetic,
   [Rule.ProductOfOneVariable]: productOfOneVariable,
 };
 
