@@ -5,10 +5,10 @@ import Rule from './rules';
 export type MathNode = mathjs.MathNode;
 
 /** Used for functions that apply one rule to an expression and return the result */
-type StepFunction = (n: mathjs.MathNode) => mathjs.MathNode;
+type RuleApplicationFunction = (n: MathNode) => MathNode;
 
 /** Maps each rule to a function that applies that rule to a given math node */
-const rulesToFunctions: Record<Rule, StepFunction> = {
+const rulesToFunctions: Record<Rule, RuleApplicationFunction> = {
   [Rule.ProductOfOneVariable]: productOfOneVariable,
 };
 
