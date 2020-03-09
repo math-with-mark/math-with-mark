@@ -91,4 +91,33 @@ describe('evaluateArithmetic', () => {
   it('evaluates arithmetic inside algebraic expression', () => {
     expect(sut('(1+1)*x')).toEqual('2 * x');
   });
+
+  it('does not evaluate division', () => {
+    expect(sut('2/3')).toEqual('2 / 3');
+  });
+
+  it('does simplify arithmetic in numerators and denominators', () => {
+    expect(sut('(2+3)/(5+7)')).toEqual('5 / 12');
+  });
+
+  // TODO
+  xit('combines fractions of the same denominator', () => {
+    expect(sut('1/3 + 1/3')).toEqual('2 / 3');
+    expect(sut('1/3 * 2/3')).toEqual('2 / 9');
+  });
+
+  xit('simplifies fractions', () => {
+    expect(sut('4/6')).toEqual('2 / 3');
+    expect(sut('8/2')).toEqual('4');
+  });
+
+  xit('combines fractions of different denominators', () => {
+    expect(sut('1/2 + 1/4')).toEqual('3 / 4');
+    expect(sut('1/2 * 1/4')).toEqual('1 / 8');
+  });
+
+  xit('combines and simplifies fractions', () => {
+    expect(sut('1/4 + 1/4')).toEqual('1 / 2');
+    expect(sut('3/4 * 1/3')).toEqual('1 / 4');
+  });
 });

@@ -126,7 +126,7 @@ export function applyRule(mathText: string, rule: Rule): string {
 }
 
 /**
- * Evaluates arithmetic inside an algebraic expression. Does not do any
+ * Evaluates non-division arithmetic inside an algebraic expression. Does not do any
  * algebraic evaluation.
  * @param node the expression to evaluate
  * @return the arithmetically evaluated expression
@@ -134,8 +134,10 @@ export function applyRule(mathText: string, rule: Rule): string {
 export function evaluateArithmetic(node: mathjs.MathNode): mathjs.MathNode {
   let transformed = node.transform(function(node, path, parent) {
     // if can be arithmetically evaluated
+    // and none of its children are division nodes
     let arithmeticEvaluation = tryEvaluateArithmetic(node.toString());
-    if (arithmeticEvaluation !== 'Invalid expression') {
+    let hasDivision = node.toString().indexOf('/') !== -1;
+    if (!hasDivision && arithmeticEvaluation !== 'Invalid expression') {
       return mathjs.parse(arithmeticEvaluation);
     } else {
       return node;
