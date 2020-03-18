@@ -107,32 +107,16 @@ function tryMath(mathText: string, arithmetic: boolean): string {
   return evaluation ? evaluation.toString() : 'Invalid expression';
 }
 
-function tryParse(mathText: string): MathNode | null {
-  let node: MathNode | null = null;
-  try {
-    node = mathjs.parse(mathText);
-  } catch (err) {
-    // do nothing, invalid text
-  }
-  return node;
-}
-
 /**
  * Applies the given rule to the given expression
- * @param mathText The expression (to be parsed)
+ * @param node The expression
  * @param rule The rule to apply
  * @return the result of applying the given rule to the given expression.
  * If the given expression cannot be parsed or the rule cannot be applied,
  * returns `mathText` as given
  */
-export function applyRule(mathText: string, rule: Rule): string {
-  let node: MathNode | null = tryParse(mathText);
-  if (node === null) return mathText;
-
-  node = rulesToFunctions[rule](node);
-  let s = node.toString();
-  s = s.replace(/ /g, ''); // for ease of writing tests
-  return s;
+export function applyRule(node: MathNode, rule: Rule): MathNode {
+  return rulesToFunctions[rule](node);
 }
 
 /**
