@@ -139,3 +139,12 @@ export function evaluateArithmetic(node: MathNode): MathNode {
   });
   return transformed;
 }
+
+export function texToMath(tex: string): string {
+  tex = tex.split('{').join('(');
+  tex = tex.split('}').join(')');
+  tex = tex.split('\\left').join('');
+  tex = tex.split('\\right').join('');
+  tex = tex.split('\\cdot ').join(' * ');
+  return tex;
+}

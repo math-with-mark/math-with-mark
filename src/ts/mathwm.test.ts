@@ -119,3 +119,19 @@ describe('evaluateArithmetic', () => {
     expect(sut('3/4 * 1/3')).toEqual('1 / 4');
   });
 });
+
+describe('texToMath', () => {
+  let sut = mathwm.texToMath;
+
+  it('replaces all instances of curly braces with parentheses', () => {
+    expect(sut('x^{1+2}+y^{3+4}')).toBe('x^(1+2)+y^(3+4)');
+  });
+
+  it('removes "\\left" and "\\right"', () => {
+    expect(sut('\\left(x\\right)')).toBe('(x)');
+  });
+
+  it('replaces "\\cdot" with "*"', () => {
+    expect(sut('a\\cdot b')).toBe('a * b');
+  });
+});
