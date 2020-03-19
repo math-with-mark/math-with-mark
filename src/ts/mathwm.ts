@@ -89,7 +89,7 @@ export function tryEvaluateArithmetic(mathText: string): string {
 /**
  * Tries to evaluate the algebraic expression. If `mathText` is not able to
  * be evaluated, returns 'Invalid expression'. Otherwise, returns the evaluation
- * @param mathText The expression to be evaluated, as interpreted by mathjs
+ * @param mathText The expression to be evaluated
  * @return the evaluation, if possible, otherwise 'Invalid expression'
  */
 export function tryEvaluateAlgebraic(mathText: string): string {
