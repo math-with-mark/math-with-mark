@@ -133,5 +133,6 @@ describe('texToMath', () => {
 
   it('replaces "\\cdot" with "*"', () => {
     expect(sut('a\\cdot b')).toBe('a * b');
+    expect(sut('1\\cdot2')).toBe('1 * 2');
   });
 });
