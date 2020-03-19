@@ -68,13 +68,11 @@ class StatefulSandbox extends React.Component<any, any> {
             mathquillDidMount={this.mathQuillDidMount}
           />
         </p>
-        <div className="result-container">
-          <p>(Unprocessed) Tex: {this.state.latex}</p>
-          <p>(Processed) MathText: {mathwm.texToMath(this.state.latex)}</p>
-          <p>Evaluation of MathText: {this.state.evaluation}</p>
-          <p>Correct answer: {this.answerString}</p>
-          <p>Your answer is {this.isCorrect() ? 'correct!' : 'incorrect.'}</p>
-        </div>
+        <p>(Unprocessed) Tex: {this.state.latex}</p>
+        <p>(Processed) MathText: {mathwm.texToMath(this.state.latex)}</p>
+        <p>Evaluation of MathText: {this.state.evaluation}</p>
+        <p>Correct answer: {this.answerString}</p>
+        <p>Your answer is {this.isCorrect() ? 'correct!' : 'incorrect.'}</p>
         <button onClick={this.new}>New Challenge</button>
       </div>
     );
