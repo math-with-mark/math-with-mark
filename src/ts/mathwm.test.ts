@@ -49,29 +49,6 @@ describe('evaluate product of one variable', () => {
   });
 });
 
-describe('tryEvaluateArithmetic', () => {
-  let tryEvaluate = mathwm.tryEvaluateArithmetic;
-  it("Evaluates empty string to 'Invalid expression'", () => {
-    let sut = '';
-    expect(tryEvaluate(sut)).toBe('Invalid expression');
-  });
-
-  it('Evaluates numbers to their value', () => {
-    let sut = '42';
-    expect(tryEvaluate(sut)).toBe('42');
-  });
-
-  it('Evaluates first three hyperoperators on real numbers', () => {
-    let sut = '1 + 2 - 3 * 4 / 5 + 6 ^ 7 - log(e)';
-    expect(tryEvaluate(sut)).toBe('279935.6');
-  });
-
-  it('Evaluates expressions with complex numbers', () => {
-    let sut = '2 + i - 3 + 2i';
-    expect(tryEvaluate(sut)).toBe('-1 + 3i');
-  });
-});
-
 describe('evaluateArithmetic', () => {
   // compare string representations, should be equal
   let sut = (testCase: string): string => {
@@ -134,5 +111,41 @@ describe('texToMath', () => {
   it('replaces "\\cdot" with "*"', () => {
     expect(sut('a\\cdot b')).toBe('a * b');
     expect(sut('1\\cdot2')).toBe('1 * 2');
+  });
+});
+
+describe('tryParse', () => {
+  let sut = (input: string): string | null => {
+    let node = mathwm.tryParse(input);
+    if (node === null) return null;
+    return node.toString();
+  };
+
+  it('parses algebraic expressions', () => {
+    expect(sut('x + 2')).toBe('x + 2');
+  });
+
+  it('works on invalid expressions', () => {
+    expect(sut('+')).toBe(null);
+  });
+});
+
+describe('evaluate', () => {
+  let sut = (mathText: string, arithmetic: boolean): string => {
+    let node = mathjs.parse(mathText);
+    let evaluation = mathwm.evaluate(node, arithmetic);
+    return evaluation.toString();
+  };
+
+  it('evaluates arithmetic', () => {
+    expect(sut('1 + 1', true)).toBe('2');
+  });
+
+  it('evaluates algebraic expressions', () => {
+    expect(sut('x + x', false)).toBe('2 * x');
+  });
+
+  it('fails to evaluate algebraic expressions arithmetically', () => {
+    expect(sut('x + x', true)).toBe('x + x');
   });
 });

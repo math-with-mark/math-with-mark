@@ -28,7 +28,9 @@ class StatefulSandbox extends React.Component<any, any> {
     let a = Math.ceil(Math.random() * 10);
     let b = Math.ceil(Math.random() * 10);
     this.expressionLatex = `x^{${a}}x^{${b}}`;
-    this.answerString = `x ^ ${a + b}`;
+    let answerNode = mathwm.tryParse(`x ^ ${a + b}`);
+    this.answerString =
+      answerNode == null ? 'No solution' : answerNode.toString();
   };
 
   onChange = (): void => {
@@ -44,14 +46,16 @@ class StatefulSandbox extends React.Component<any, any> {
     const latex = this.mathField.latex();
     const text = this.mathField.text();
     const mathText = mathwm.texToMath(latex);
-    const evaluation = mathwm.tryEvaluateAlgebraic(mathText);
+    const node = mathwm.tryParse(mathText);
+    const evaluation =
+      node === null
+        ? 'Invalid expression'
+        : mathwm.evaluate(node, false).toString();
     super.setState({ latex, text, evaluation });
   }
 
   isCorrect = (): boolean => {
-    return (
-      this.state.evaluation === mathwm.tryEvaluateAlgebraic(this.answerString)
-    );
+    return this.state.evaluation === this.answerString;
   };
 
   render() {

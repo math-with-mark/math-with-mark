@@ -77,34 +77,22 @@ function args(node: MathNode): MathNode[] {
 }
 
 /**
- * Tries to evaluate the arithmetic expression. If `mathText` is not able to
- * be evaluated, returns 'Invalid expression'. Otherwise, returns the evaluation
- * @param mathText The expression to be evaluated, as interpreted by mathjs
- * @return the evaluation, if possible, otherwise 'Invalid expression'
+ * Evaluate a given expression either arithmetically or algebraically
+ * @param node The expression to evaluate
+ * @param arithmetic True to evaluate as an arithmetic expression.
+ * False for algebraic evaluation
+ * @return the evaluation of the expression. If expression cannot be evaluated,
+ * return original expression
  */
-export function tryEvaluateArithmetic(mathText: string): string {
-  return tryMath(mathText, true);
-}
-
-/**
- * Tries to evaluate the algebraic expression. If `mathText` is not able to
- * be evaluated, returns 'Invalid expression'. Otherwise, returns the evaluation
- * @param mathText The expression to be evaluated
- * @return the evaluation, if possible, otherwise 'Invalid expression'
- */
-export function tryEvaluateAlgebraic(mathText: string): string {
-  return tryMath(mathText, false);
-}
-
-function tryMath(mathText: string, arithmetic: boolean): string {
+export function evaluate(node: MathNode, arithmetic: boolean): MathNode {
   let func = arithmetic ? mathjs.evaluate : mathjs.simplify;
-  let evaluation: any = undefined;
   try {
-    evaluation = func(mathText); // may return object or undefined
+    // stringify, apply function, stringify result, parse stringified result
+    let resultString = func(node.toString()).toString();
+    return mathjs.parse(resultString);
   } catch (err) {
-    // do nothing, invalid expression
+    return node;
   }
-  return evaluation ? evaluation.toString() : 'Invalid expression';
 }
 
 /**
@@ -126,17 +114,19 @@ export function applyRule(node: MathNode, rule: Rule): MathNode {
  * @return the arithmetically evaluated expression
  */
 export function evaluateArithmetic(node: MathNode): MathNode {
-  let transformed = node.transform(function(node, path, parent) {
-    // if can be arithmetically evaluated
-    // and none of its children are division nodes
-    let arithmeticEvaluation = tryEvaluateArithmetic(node.toString());
-    let hasDivision = node.toString().indexOf('/') !== -1;
-    if (!hasDivision && arithmeticEvaluation !== 'Invalid expression') {
-      return mathjs.parse(arithmeticEvaluation);
-    } else {
-      return node;
-    }
-  });
+  let transformed = node.transform(
+    (node, path, parent): MathNode => {
+      // if can be arithmetically evaluated
+      // and none of its children are division nodes
+      let arithmeticEvaluation = evaluate(node, true);
+      let hasDivision = node.toString().indexOf('/') !== -1;
+      if (!hasDivision) {
+        return arithmeticEvaluation;
+      } else {
+        return node;
+      }
+    },
+  );
   return transformed;
 }
 
@@ -147,4 +137,13 @@ export function texToMath(tex: string): string {
   tex = tex.split('\\right').join('');
   tex = tex.split(/\\cdot ?/).join(' * ');
   return tex;
+}
+
+export function tryParse(mathText: string): MathNode | null {
+  try {
+    let node = mathjs.parse(mathText);
+    return node;
+  } catch (err) {
+    return null;
+  }
 }
