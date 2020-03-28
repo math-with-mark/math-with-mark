@@ -154,3 +154,44 @@ describe('evaluate', () => {
     expect(sut('x + x', true)).toBe('x + x');
   });
 });
+
+describe('steps', () => {
+  let sut = (mathText: string): string => {
+    let node = mathjs.parse(mathText);
+    let result = mathwm.steps(node);
+    let str = '[';
+    for (let i = 0; i < result.length; i++) {
+      let step = result[i];
+      if (i > 0) str += ', ';
+      str += "{'";
+      str += step.node.toString();
+      str += "', ";
+      str += Rule[step.rule];
+      str += '}';
+    }
+    str += ']';
+    return str;
+  };
+
+  it('returns a one-element array when no step can be applied', () => {
+    expect(sut('x+2')).toBe(`[{'x + 2', ${Rule[Rule.None]}}]`);
+  });
+
+  it('simplifies arithmetic in one step', () => {
+    expect(sut('1 + 1')).toBe(
+      `[{'1 + 1', ${Rule[Rule.None]}}, {'2', ${Rule[Rule.Arithmetic]}}]`,
+    );
+    expect(sut('1 + 2 + 3')).toBe(
+      `[{'1 + 2 + 3', ${Rule[Rule.None]}}, {'6', ${Rule[Rule.Arithmetic]}}]`,
+    );
+  });
+
+  it('simplifies multi-step algebraic expressions', () => {
+    expect(sut('x^(1+1)*x^(2+2)')).toBe(
+      `[{'x ^ (1 + 1) * x ^ (2 + 2)', ${Rule[Rule.None]}}, ` +
+        `{'x ^ 2 * x ^ 4', ${Rule[Rule.Arithmetic]}}, ` +
+        `{'x ^ (2 + 4)', ${Rule[Rule.ProductOfOneVariable]}}, ` +
+        `{'x ^ 6', ${Rule[Rule.Arithmetic]}}]`,
+    );
+  });
+});

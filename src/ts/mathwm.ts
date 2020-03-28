@@ -17,6 +17,7 @@ const rulesToFunctions: Record<Rule, RuleApplicationFunction> = {
   [Rule.None]: node => node,
   [Rule.Arithmetic]: evaluateArithmetic,
   [Rule.ProductOfOneVariable]: productOfOneVariable,
+  [Rule.COUNT_MINUS_ONE]: node => node,
 };
 
 function productOfOneVariable(node: MathNode): MathNode {
@@ -147,4 +148,32 @@ export function tryParse(mathText: string): MathNode | null {
   } catch (err) {
     return null;
   }
+}
+
+/**
+ * Returns the step-by-step evaluation of this node, as dictated by rules.
+ * First element of the array is the node itself with the no-op rule.
+ * Rules are applied in order (arithmetic first, then algebra)
+ * If any rule transforms the node, it is used as the next step
+ * Final node is not changed by any of the rule functions
+ * @param node
+ */
+export function steps(node: MathNode): Step[] {
+  let steps: Step[] = [{ node, rule: Rule.None }];
+  let done = false;
+  while (!done) {
+    done = true; // assume no rule will further simplify the expression
+    let lastNode: MathNode = steps[steps.length - 1].node;
+    for (let i = 0; i < Rule.COUNT_MINUS_ONE; i++) {
+      let rule: Rule = i as Rule;
+      let transformed = rulesToFunctions[rule](lastNode);
+      if (transformed.toString() !== lastNode.toString()) {
+        done = false;
+        steps.push({ node: transformed, rule });
+        break; // restart from beginning of list with new lastNode
+      }
+    }
+  }
+
+  return steps;
 }
