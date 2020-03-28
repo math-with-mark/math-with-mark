@@ -140,6 +140,7 @@ export function texToMath(tex: string): string {
 }
 
 export function tryParse(mathText: string): MathNode | null {
+  if (mathText.trim() === '') return null;
   try {
     let node = mathjs.parse(mathText);
     return node;

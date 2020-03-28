@@ -128,6 +128,11 @@ describe('tryParse', () => {
   it('works on invalid expressions', () => {
     expect(sut('+')).toBe(null);
   });
+
+  it('returns null on strings of whitespace', () => {
+    expect(sut('')).toBe(null);
+    expect(sut(' \t ')).toBe(null);
+  });
 });
 
 describe('evaluate', () => {
