@@ -2,7 +2,7 @@ import React from 'react';
 import { addStyles, EditableMathField, MathField } from 'react-mathquill';
 
 import * as mathwm from '../ts/mathwm';
-import Latex from '../Latex';
+import Rule from '../ts/rules';
 
 addStyles();
 
@@ -11,27 +11,13 @@ const Sandbox = (): JSX.Element => <StatefulSandbox />;
 
 class StatefulSandbox extends React.Component<any, any> {
   mathField: MathField;
-  expressionLatex: string;
-  answerString: string;
   constructor(props?: any) {
     super(props);
     this.state = {
       latex: '', // used for initial population
     };
     this.mathField = (null as unknown) as MathField; // assigned on mount
-    this.expressionLatex = this.answerString = ''; // assigned in `new`
-    this.new();
   }
-
-  new = (): void => {
-    if (this.mathField) this.mathField.latex('');
-    let a = Math.ceil(Math.random() * 10);
-    let b = Math.ceil(Math.random() * 10);
-    this.expressionLatex = `x^{${a}}x^{${b}}`;
-    let answerNode = mathwm.tryParse(`x ^ ${a + b}`);
-    this.answerString =
-      answerNode == null ? 'No solution' : answerNode.toString();
-  };
 
   onChange = (): void => {
     this.updateState();
@@ -54,30 +40,61 @@ class StatefulSandbox extends React.Component<any, any> {
     super.setState({ latex, text, evaluation });
   }
 
-  isCorrect = (): boolean => {
-    return this.state.evaluation === this.answerString;
+  evaluationSteps = (): JSX.Element => {
+    const mathText = mathwm.texToMath(this.state.latex);
+    const node = mathwm.tryParse(mathText);
+    if (node === null) return <p>Invalid expression</p>;
+    const steps = mathwm.steps(node);
+    return (
+      <div>
+        <p>Evaluation steps:</p>
+        <ol>{steps.map(this.step)}</ol>
+      </div>
+    );
+  };
+
+  step = (s: mathwm.Step): JSX.Element => {
+    return (
+      <li key={s.node.toString()}>
+        <p>
+          {s.node.toString()} ({this.nameOf(s.rule as Rule)})
+        </p>
+      </li>
+    );
+  };
+
+  nameOf = (rule: Rule): string => {
+    switch (rule) {
+      case Rule.None:
+        return 'Initial expression';
+      case Rule.Arithmetic:
+        return 'Arithmetic';
+      case Rule.ProductOfOneVariable:
+        return 'Product of One Variable';
+      case Rule.PowerToPower:
+        return 'Power to Power';
+      default:
+        return 'Unknown';
+    }
   };
 
   render() {
     return (
       <div>
-        <p>
-          Evaluate <Latex inline content={this.expressionLatex} />.
-        </p>
-        <p>
-          Your answer:{' '}
-          <EditableMathField
-            latex={this.state.latex}
-            onChange={this.onChange}
-            mathquillDidMount={this.mathQuillDidMount}
-          />
-        </p>
-        <p>(Unprocessed) Tex: {this.state.latex}</p>
-        <p>(Processed) MathText: {mathwm.texToMath(this.state.latex)}</p>
-        <p>Evaluation of MathText: {this.state.evaluation}</p>
-        <p>Correct answer: {this.answerString}</p>
-        <p>Your answer is {this.isCorrect() ? 'correct!' : 'incorrect.'}</p>
-        <button onClick={this.new}>New Challenge</button>
+        Enter an expression:{' '}
+        <EditableMathField
+          latex={this.state.latex}
+          onChange={this.onChange}
+          mathquillDidMount={this.mathQuillDidMount}
+        />
+        <br />
+        <div>(Unprocessed) Tex: {this.state.latex}</div>
+        <br />
+        <div>(Processed) MathText: {mathwm.texToMath(this.state.latex)}</div>
+        <br />
+        <div>Evaluation of MathText: {this.state.evaluation}</div>
+        <br />
+        {this.evaluationSteps()}
       </div>
     );
   }

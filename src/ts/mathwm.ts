@@ -7,7 +7,7 @@ export type MathNode = mathjs.MathNode;
 /** Used for functions that apply one rule to an expression and return the result */
 type RuleApplicationFunction = (n: MathNode) => MathNode;
 
-interface Step {
+export interface Step {
   node: MathNode;
   rule: Rule;
 }
@@ -46,7 +46,8 @@ function productOfOneVariable(node: MathNode): MathNode {
     if (leftVariable !== undefined && leftVariable === rightVariable) {
       let leftExponent: number = node.args?.[0].args?.[1].value;
       let rightExponent: number = node.args?.[1].args?.[1].value;
-      return mathjs.parse(`${leftVariable}^(${leftExponent}+${rightExponent})`);
+      let nodeStr = `${leftVariable} ^ (${leftExponent} + ${rightExponent})`;
+      return mathjs.parse(nodeStr);
     }
   }
   return node;
