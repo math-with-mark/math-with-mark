@@ -17,8 +17,21 @@ const rulesToFunctions: Record<Rule, RuleApplicationFunction> = {
   [Rule.None]: node => node,
   [Rule.Arithmetic]: evaluateArithmetic,
   [Rule.ProductOfOneVariable]: productOfOneVariable,
+  [Rule.PowerToPower]: powerToPower,
   [Rule.COUNT_MINUS_ONE]: node => node,
 };
+
+function powerToPower(node: MathNode): MathNode {
+  if (node.op === '^' && node.args?.[0].content?.op === '^') {
+    let lowerExpNode = node.args?.[0].content;
+    let base: string = `${lowerExpNode.args?.[0].toString()}`;
+    let lowerPower: string = `${lowerExpNode.args?.[1].toString()}`;
+    let upperPower: string = `${node.args?.[1]}`;
+    let newMathText = `${base} ^ (${lowerPower} * ${upperPower})`;
+    return mathjs.parse(newMathText);
+  }
+  return node;
+}
 
 function productOfOneVariable(node: MathNode): MathNode {
   // If this is a product of two exponentiations (nominal case)
