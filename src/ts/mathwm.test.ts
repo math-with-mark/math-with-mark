@@ -58,11 +58,7 @@ describe('evaluate product of one variable', () => {
 });
 
 describe('evaluateArithmetic', () => {
-  // compare string representations, should be equal
-  let sut = (testCase: string): string => {
-    let node = mathjs.parse(testCase);
-    return mathwm.evaluateArithmetic(node).toString();
-  };
+  let sut = ruleSut(Rule.Arithmetic);
   it('does not evaluate algebra', () => {
     expect(sut('x + x')).toEqual('x + x');
   });

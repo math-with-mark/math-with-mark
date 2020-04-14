@@ -105,7 +105,7 @@ export function evaluate(node: MathNode, arithmetic: boolean): MathNode {
  * returns `mathText` as given
  */
 export function applyRule(node: MathNode, rule: Rule): MathNode {
-  return rulesToFunctions[rule](node);
+  return node.transform(rulesToFunctions[rule]);
 }
 
 /**
@@ -115,20 +115,15 @@ export function applyRule(node: MathNode, rule: Rule): MathNode {
  * @return the arithmetically evaluated expression
  */
 export function evaluateArithmetic(node: MathNode): MathNode {
-  let transformed = node.transform(
-    (node, path, parent): MathNode => {
-      // if can be arithmetically evaluated
-      // and none of its children are division nodes
-      let arithmeticEvaluation = evaluate(node, true);
-      let hasDivision = node.toString().indexOf('/') !== -1;
-      if (!hasDivision) {
-        return arithmeticEvaluation;
-      } else {
-        return node;
-      }
-    },
-  );
-  return transformed;
+  // if can be arithmetically evaluated
+  // and none of its children are division nodes
+  let arithmeticEvaluation = evaluate(node, true);
+  let hasDivision = node.toString().indexOf('/') !== -1;
+  if (!hasDivision) {
+    return arithmeticEvaluation;
+  } else {
+    return node;
+  }
 }
 
 export function texToMath(tex: string): string {
@@ -166,7 +161,7 @@ export function steps(node: MathNode): Step[] {
     let lastNode: MathNode = steps[steps.length - 1].node;
     for (let i = 0; i < Rule.COUNT_MINUS_ONE; i++) {
       let rule: Rule = i as Rule;
-      let transformed = rulesToFunctions[rule](lastNode);
+      let transformed = applyRule(lastNode, rule);
       if (transformed.toString() !== lastNode.toString()) {
         done = false;
         steps.push({ node: transformed, rule });
