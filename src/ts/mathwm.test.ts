@@ -64,7 +64,7 @@ describe('evaluateArithmetic', () => {
     return mathwm.evaluateArithmetic(node).toString();
   };
   it('does not evaluate algebra', () => {
-    expect(sut('x+x')).toEqual('x + x');
+    expect(sut('x + x')).toEqual('x + x');
   });
 
   it('does evaluate arithmetic', () => {
