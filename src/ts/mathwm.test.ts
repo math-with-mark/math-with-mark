@@ -2,6 +2,14 @@ import * as mathjs from 'mathjs';
 import * as mathwm from './mathwm';
 import Rule from './rules';
 
+let ruleSut = (rule: Rule): ((mathText: string) => string) => {
+  return (mathText: string) => {
+    let node = mathjs.parse(mathText);
+    node = mathwm.applyRule(node, rule);
+    return node.toString();
+  };
+};
+
 describe('coefficient', () => {
   let coefficient = mathwm.coefficient;
   it('works in the simplest case', () => {
@@ -31,11 +39,7 @@ describe('coefficient', () => {
 });
 
 describe('evaluate product of one variable', () => {
-  let sut = (mathText: string): string => {
-    let node = mathjs.parse(mathText);
-    node = mathwm.applyRule(node, Rule.ProductOfOneVariable);
-    return node.toString();
-  };
+  let sut = ruleSut(Rule.ProductOfOneVariable);
   it('works in nominal case', () => {
     expect(sut('x^2*x^3')).toBe('x ^ (2 + 3)');
   });
@@ -46,6 +50,10 @@ describe('evaluate product of one variable', () => {
 
   it('does not mistakenly evaluate addition', () => {
     expect(sut('(x+2)+(x+3)')).toBe('(x + 2) + (x + 3)');
+  });
+
+  it('only simplifies outermost application in recursive case', () => {
+    expect(sut('x ^ 2 * x ^ 3 * x ^ 4')).toBe('x ^ (2 + 3) * x ^ 4');
   });
 });
 
