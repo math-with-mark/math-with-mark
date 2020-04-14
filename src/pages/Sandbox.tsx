@@ -2,7 +2,7 @@ import React from 'react';
 import { addStyles, EditableMathField, MathField } from 'react-mathquill';
 
 import * as mathwm from '../ts/mathwm';
-import Rule from '../ts/rules';
+import RuleID from '../ts/rules';
 
 addStyles();
 
@@ -57,21 +57,21 @@ class StatefulSandbox extends React.Component<any, any> {
     return (
       <li key={s.node.toString()}>
         <p>
-          {s.node.toString()} ({this.nameOf(s.rule as Rule)})
+          {s.node.toString()} ({this.nameOf(s.rule as RuleID)})
         </p>
       </li>
     );
   };
 
-  nameOf = (rule: Rule): string => {
+  nameOf = (rule: RuleID): string => {
     switch (rule) {
-      case Rule.None:
+      case RuleID.None:
         return 'Initial expression';
-      case Rule.Arithmetic:
+      case RuleID.Arithmetic:
         return 'Arithmetic';
-      case Rule.ProductOfOneVariable:
+      case RuleID.ProductOfOneVariable:
         return 'Product of One Variable';
-      case Rule.PowerToPower:
+      case RuleID.PowerToPower:
         return 'Power to Power';
       default:
         return 'Unknown';

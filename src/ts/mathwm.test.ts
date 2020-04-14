@@ -1,14 +1,7 @@
 import * as mathjs from 'mathjs';
-import * as mathwm from './mathwm';
-import Rule from './rules';
 
-let ruleSut = (rule: Rule): ((mathText: string) => string) => {
-  return (mathText: string) => {
-    let node = mathjs.parse(mathText);
-    node = mathwm.applyRule(node, rule);
-    return node.toString();
-  };
-};
+import { RuleID } from './rules';
+import * as mathwm from './mathwm';
 
 describe('coefficient', () => {
   let coefficient = mathwm.coefficient;
@@ -38,89 +31,8 @@ describe('coefficient', () => {
   });
 });
 
-describe('evaluate product of one variable', () => {
-  let sut = ruleSut(Rule.ProductOfOneVariable);
-  it('works in nominal case', () => {
-    expect(sut('x^2*x^3')).toBe('x ^ (2 + 3)');
-  });
-
-  it('returns given text when rule cannot be applied', () => {
-    expect(sut('1+4')).toBe('1 + 4');
-  });
-
-  it('does not mistakenly evaluate addition', () => {
-    expect(sut('(x+2)+(x+3)')).toBe('(x + 2) + (x + 3)');
-  });
-
-  it('only simplifies outermost application in recursive case', () => {
-    expect(sut('x ^ 2 * x ^ 3 * x ^ 4')).toBe('x ^ (2 + 3) * x ^ 4');
-  });
-});
-
-describe('power to power', () => {
-  let sut = ruleSut(Rule.PowerToPower);
-
-  it('works in nominal case', () => {
-    expect(sut('(x ^ 2) ^ 3')).toBe('x ^ (2 * 3)');
-  });
-
-  it('works in power tower case', () => {
-    expect(sut('((x ^ 2) ^ 3) ^ 4')).toBe('(x ^ 2) ^ (3 * 4)');
-  });
-
-  it('works with parentheses', () => {
-    expect(sut('((x + 1) ^ (2 + 3)) ^ (4 + 5)')).toBe(
-      '(x + 1) ^ ((2 + 3) * (4 + 5))',
-    );
-  });
-});
-
-describe('evaluateArithmetic', () => {
-  let sut = ruleSut(Rule.Arithmetic);
-  it('does not evaluate algebra', () => {
-    expect(sut('x + x')).toEqual('x + x');
-  });
-
-  it('does evaluate arithmetic', () => {
-    expect(sut('1+2')).toEqual('3');
-  });
-
-  it('evaluates arithmetic inside algebraic expression', () => {
-    expect(sut('(1+1)*x')).toEqual('2 * x');
-  });
-
-  it('does not evaluate division', () => {
-    expect(sut('2/3')).toEqual('2 / 3');
-  });
-
-  it('does simplify arithmetic in numerators and denominators', () => {
-    expect(sut('(2+3)/(5+7)')).toEqual('5 / 12');
-  });
-
-  // TODO
-  xit('combines fractions of the same denominator', () => {
-    expect(sut('1/3 + 1/3')).toEqual('2 / 3');
-    expect(sut('1/3 * 2/3')).toEqual('2 / 9');
-  });
-
-  xit('simplifies fractions', () => {
-    expect(sut('4/6')).toEqual('2 / 3');
-    expect(sut('8/2')).toEqual('4');
-  });
-
-  xit('combines fractions of different denominators', () => {
-    expect(sut('1/2 + 1/4')).toEqual('3 / 4');
-    expect(sut('1/2 * 1/4')).toEqual('1 / 8');
-  });
-
-  xit('combines and simplifies fractions', () => {
-    expect(sut('1/4 + 1/4')).toEqual('1 / 2');
-    expect(sut('3/4 * 1/3')).toEqual('1 / 4');
-  });
-});
-
 describe('texToMath', () => {
-  let sut = mathwm.texToMath;
+  const sut = mathwm.texToMath;
 
   it('replaces all instances of curly braces with parentheses', () => {
     expect(sut('x^{1+2}+y^{3+4}')).toBe('x^(1+2)+y^(3+4)');
@@ -137,7 +49,7 @@ describe('texToMath', () => {
 });
 
 describe('tryParse', () => {
-  let sut = (input: string): string | null => {
+  const sut = (input: string): string | null => {
     let node = mathwm.tryParse(input);
     if (node === null) return null;
     return node.toString();
@@ -158,7 +70,7 @@ describe('tryParse', () => {
 });
 
 describe('evaluate', () => {
-  let sut = (mathText: string, arithmetic: boolean): string => {
+  const sut = (mathText: string, arithmetic: boolean): string => {
     let node = mathjs.parse(mathText);
     let evaluation = mathwm.evaluate(node, arithmetic);
     return evaluation.toString();
@@ -178,7 +90,7 @@ describe('evaluate', () => {
 });
 
 describe('steps', () => {
-  let sut = (mathText: string): string => {
+  const sut = (mathText: string): string => {
     let node = mathjs.parse(mathText);
     let result = mathwm.steps(node);
     let str = '[';
@@ -188,7 +100,7 @@ describe('steps', () => {
       str += "{'";
       str += step.node.toString();
       str += "', ";
-      str += Rule[step.rule];
+      str += RuleID[step.rule];
       str += '}';
     }
     str += ']';
@@ -196,35 +108,39 @@ describe('steps', () => {
   };
 
   it('returns a one-element array when no step can be applied', () => {
-    expect(sut('x+2')).toBe(`[{'x + 2', ${Rule[Rule.None]}}]`);
+    expect(sut('x + 2')).toBe(`[{'x + 2', ${RuleID[RuleID.None]}}]`);
   });
 
   it('simplifies arithmetic in one step', () => {
     expect(sut('1 + 1')).toBe(
-      `[{'1 + 1', ${Rule[Rule.None]}}, {'2', ${Rule[Rule.Arithmetic]}}]`,
+      `[{'1 + 1', ${RuleID[RuleID.None]}}, {'2', ${
+        RuleID[RuleID.Arithmetic]
+      }}]`,
     );
     expect(sut('1 + 2 + 3')).toBe(
-      `[{'1 + 2 + 3', ${Rule[Rule.None]}}, {'6', ${Rule[Rule.Arithmetic]}}]`,
+      `[{'1 + 2 + 3', ${RuleID[RuleID.None]}}, {'6', ${
+        RuleID[RuleID.Arithmetic]
+      }}]`,
     );
   });
 
   it('simplifies multi-step algebraic expressions', () => {
-    expect(sut('x^(1+1)*x^(2+2)')).toBe(
-      `[{'x ^ (1 + 1) * x ^ (2 + 2)', ${Rule[Rule.None]}}, ` +
-        `{'x ^ 2 * x ^ 4', ${Rule[Rule.Arithmetic]}}, ` +
-        `{'x ^ (2 + 4)', ${Rule[Rule.ProductOfOneVariable]}}, ` +
-        `{'x ^ 6', ${Rule[Rule.Arithmetic]}}]`,
+    expect(sut('x ^ (1 + 1) * x ^ (2 + 2)')).toBe(
+      `[{'x ^ (1 + 1) * x ^ (2 + 2)', ${RuleID[RuleID.None]}}, ` +
+        `{'x ^ 2 * x ^ 4', ${RuleID[RuleID.Arithmetic]}}, ` +
+        `{'x ^ (2 + 4)', ${RuleID[RuleID.ProductOfOneVariable]}}, ` +
+        `{'x ^ 6', ${RuleID[RuleID.Arithmetic]}}]`,
     );
   });
 
   it('evaluates two unique algebraic rules', () => {
-    let node = mathjs.parse('(x ^ 2) ^ 3 * x ^ 4');
-    let actual = mathwm.steps(node);
+    const node = mathjs.parse('(x ^ 2) ^ 3 * x ^ 4');
+    const actual = mathwm.steps(node);
     expect(actual.length).toBeGreaterThan(1);
     expect(actual[actual.length - 1].node.toString()).toBe('x ^ 10');
-    expect(actual.map((el) => el.rule)).toContain(Rule.None);
-    expect(actual.map((el) => el.rule)).toContain(Rule.Arithmetic);
-    expect(actual.map((el) => el.rule)).toContain(Rule.ProductOfOneVariable);
-    expect(actual.map((el) => el.rule)).toContain(Rule.PowerToPower);
+    expect(actual.map((el) => el.rule)).toContain(RuleID.None);
+    expect(actual.map((el) => el.rule)).toContain(RuleID.Arithmetic);
+    expect(actual.map((el) => el.rule)).toContain(RuleID.ProductOfOneVariable);
+    expect(actual.map((el) => el.rule)).toContain(RuleID.PowerToPower);
   });
 });

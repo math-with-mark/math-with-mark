@@ -1,5 +1,5 @@
 import * as mathjs from 'mathjs';
-import Rule from './rules';
+import * as rules from './rules';
 
 /** Type alias, we may change away from mathjs in the future */
 export type MathNode = mathjs.MathNode;
@@ -9,48 +9,7 @@ type RuleApplicationFunction = (n: MathNode) => MathNode;
 
 export interface Step {
   node: MathNode;
-  rule: Rule;
-}
-
-/** Maps each rule to a function that applies that rule to a given math node */
-const rulesToFunctions: Record<Rule, RuleApplicationFunction> = {
-  [Rule.None]: node => node,
-  [Rule.Arithmetic]: evaluateArithmetic,
-  [Rule.ProductOfOneVariable]: productOfOneVariable,
-  [Rule.PowerToPower]: powerToPower,
-  [Rule.COUNT_MINUS_ONE]: node => node,
-};
-
-function powerToPower(node: MathNode): MathNode {
-  if (node.op === '^' && node.args?.[0].content?.op === '^') {
-    let lowerExpNode = node.args?.[0].content;
-    let base: string = `${lowerExpNode.args?.[0].toString()}`;
-    let lowerPower: string = `${lowerExpNode.args?.[1].toString()}`;
-    let upperPower: string = `${node.args?.[1]}`;
-    let newMathText = `${base} ^ (${lowerPower} * ${upperPower})`;
-    return mathjs.parse(newMathText);
-  }
-  return node;
-}
-
-function productOfOneVariable(node: MathNode): MathNode {
-  // If this is a product of two exponentiations (nominal case)
-  if (
-    node.op === '*' &&
-    node.args?.[0].op === '^' &&
-    node.args?.[1].op === '^'
-  ) {
-    let leftVariable = node.args?.[0].args?.[0].name;
-    let rightVariable = node.args?.[1].args?.[0].name;
-    // If both variables are defined and equal, assume
-    if (leftVariable !== undefined && leftVariable === rightVariable) {
-      let leftExponent: number = node.args?.[0].args?.[1].value;
-      let rightExponent: number = node.args?.[1].args?.[1].value;
-      let nodeStr = `${leftVariable} ^ (${leftExponent} + ${rightExponent})`;
-      return mathjs.parse(nodeStr);
-    }
-  }
-  return node;
+  rule: rules.RuleID;
 }
 
 /**
@@ -118,26 +77,8 @@ export function evaluate(node: MathNode, arithmetic: boolean): MathNode {
  * If the given expression cannot be parsed or the rule cannot be applied,
  * returns `mathText` as given
  */
-export function applyRule(node: MathNode, rule: Rule): MathNode {
-  return node.transform(rulesToFunctions[rule]);
-}
-
-/**
- * Evaluates non-division arithmetic inside an algebraic expression. Does not do any
- * algebraic evaluation.
- * @param node the expression to evaluate
- * @return the arithmetically evaluated expression
- */
-export function evaluateArithmetic(node: MathNode): MathNode {
-  // if can be arithmetically evaluated
-  // and none of its children are division nodes
-  let arithmeticEvaluation = evaluate(node, true);
-  let hasDivision = node.toString().indexOf('/') !== -1;
-  if (!hasDivision) {
-    return arithmeticEvaluation;
-  } else {
-    return node;
-  }
+export function applyRule(node: MathNode, rule: rules.RuleID): MathNode {
+  return node.transform(rules.RULES[rule].func);
 }
 
 export function texToMath(tex: string): string {
@@ -168,13 +109,13 @@ export function tryParse(mathText: string): MathNode | null {
  * @param node
  */
 export function steps(node: MathNode): Step[] {
-  let steps: Step[] = [{ node, rule: Rule.None }];
+  let steps: Step[] = [{ node, rule: rules.RuleID.None }];
   let done = false;
   while (!done) {
     done = true; // assume no rule will further simplify the expression
     let lastNode: MathNode = steps[steps.length - 1].node;
-    for (let i = 0; i < Rule.COUNT_MINUS_ONE; i++) {
-      let rule: Rule = i as Rule;
+    for (let i = 0; i < rules.RuleID.COUNT_MINUS_ONE; i++) {
+      let rule: rules.RuleID = i as rules.RuleID;
       let transformed = applyRule(lastNode, rule);
       if (transformed.toString() !== lastNode.toString()) {
         done = false;
