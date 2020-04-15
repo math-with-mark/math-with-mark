@@ -57,7 +57,7 @@ class StatefulSandbox extends React.Component<any, any> {
     return (
       <li key={s.node.toString()}>
         <p>
-          {s.node.toString()} ({rules.RULES[s.rule].name})
+          {s.node.toString()} ({rules.RULES[s.ruleID].name})
         </p>
       </li>
     );

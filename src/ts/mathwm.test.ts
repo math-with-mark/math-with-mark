@@ -100,7 +100,7 @@ describe('steps', () => {
       str += "{'";
       str += step.node.toString();
       str += "', ";
-      str += RuleID[step.rule];
+      str += RuleID[step.ruleID];
       str += '}';
     }
     str += ']';
@@ -138,9 +138,11 @@ describe('steps', () => {
     const actual = mathwm.steps(node);
     expect(actual.length).toBeGreaterThan(1);
     expect(actual[actual.length - 1].node.toString()).toBe('x ^ 10');
-    expect(actual.map((el) => el.rule)).toContain(RuleID.None);
-    expect(actual.map((el) => el.rule)).toContain(RuleID.Arithmetic);
-    expect(actual.map((el) => el.rule)).toContain(RuleID.ProductOfOneVariable);
-    expect(actual.map((el) => el.rule)).toContain(RuleID.PowerToPower);
+    expect(actual.map((el) => el.ruleID)).toContain(RuleID.None);
+    expect(actual.map((el) => el.ruleID)).toContain(RuleID.Arithmetic);
+    expect(actual.map((el) => el.ruleID)).toContain(
+      RuleID.ProductOfOneVariable, // prettier adds trailing comma, oh well
+    );
+    expect(actual.map((el) => el.ruleID)).toContain(RuleID.PowerToPower);
   });
 });

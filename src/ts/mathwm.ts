@@ -9,7 +9,7 @@ type RuleApplicationFunction = (n: MathNode) => MathNode;
 
 export interface Step {
   node: MathNode;
-  rule: rules.RuleID;
+  ruleID: rules.RuleID;
 }
 
 /**
@@ -109,7 +109,7 @@ export function tryParse(mathText: string): MathNode | null {
  * @param node
  */
 export function steps(node: MathNode): Step[] {
-  let steps: Step[] = [{ node, rule: rules.RuleID.None }];
+  let steps: Step[] = [{ node, ruleID: rules.RuleID.None }];
   let done = false;
   while (!done) {
     done = true; // assume no rule will further simplify the expression
@@ -119,7 +119,7 @@ export function steps(node: MathNode): Step[] {
       let transformed = applyRule(lastNode, rule);
       if (transformed.toString() !== lastNode.toString()) {
         done = false;
-        steps.push({ node: transformed, rule });
+        steps.push({ node: transformed, ruleID: rule });
         break; // restart from beginning of list with new lastNode
       }
     }
