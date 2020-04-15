@@ -14,6 +14,7 @@ export enum RuleID {
 export interface Rule {
   func: (n: MathNode) => MathNode;
   name: string;
+  latex?: string;
 }
 
 export const RULES: Record<RuleID, Rule> = {
@@ -28,10 +29,12 @@ export const RULES: Record<RuleID, Rule> = {
   [RuleID.ProductOfOneVariable]: {
     func: productOfOneVariable,
     name: 'Product of one Variable',
+    latex: 'a^b\\cdot a^c=a^{b+c}',
   },
   [RuleID.PowerToPower]: {
     func: powerToPower,
     name: 'Power to power',
+    latex: '\\left(a^b\\right)^c=a^{bc}',
   },
   [RuleID.COUNT_MINUS_ONE]: {
     func: (n) => n,

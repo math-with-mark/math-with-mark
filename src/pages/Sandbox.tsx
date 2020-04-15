@@ -3,6 +3,7 @@ import { addStyles, EditableMathField, MathField } from 'react-mathquill';
 
 import * as mathwm from '../ts/mathwm';
 import * as rules from '../ts/rules';
+import Latex from '../Latex';
 
 addStyles();
 
@@ -54,11 +55,18 @@ class StatefulSandbox extends React.Component<any, any> {
   };
 
   step = (s: mathwm.Step): JSX.Element => {
+    let rule: rules.Rule = rules.RULES[s.ruleID];
     return (
       <li key={s.node.toString()}>
-        <p>
-          {s.node.toString()} ({rules.RULES[s.ruleID].name})
-        </p>
+        {s.node.toString()} ({rule.name}
+        {rule.latex ? (
+          <>
+            : <Latex inline content={rule.latex}></Latex>
+          </>
+        ) : (
+          <></>
+        )}
+        )
       </li>
     );
   };
