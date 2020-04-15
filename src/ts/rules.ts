@@ -13,23 +13,29 @@ export enum RuleID {
 
 export interface Rule {
   func: (n: MathNode) => MathNode;
+  name: string;
 }
 
 export const RULES: Record<RuleID, Rule> = {
   [RuleID.None]: {
     func: (n) => n,
+    name: 'Initial expression',
   },
   [RuleID.Arithmetic]: {
     func: evaluateArithmetic,
+    name: 'Arithmetic',
   },
   [RuleID.ProductOfOneVariable]: {
     func: productOfOneVariable,
+    name: 'Product of one Variable',
   },
   [RuleID.PowerToPower]: {
     func: powerToPower,
+    name: 'Power to power',
   },
   [RuleID.COUNT_MINUS_ONE]: {
     func: (n) => n,
+    name: 'N/A',
   },
 };
 
