@@ -25,28 +25,34 @@ In this stage, the code is reviewed in a diff viewer to make sure it matches sty
 ## Stage 1: Unit Testing
 
 1. `npm test`
+   1. Ensure there is no extraneous output
+   1. Ensure code coverage remains at 100%
 
 ## Stage 2: Localhost Testing
 
 1. `npm start`
-1. Navigate to `localhost:3000`
+1. Navigate to `https://localhost:3000`
 1. Make sure there is no logging in the console (Ctrl+Shift+I)
+1. Perform manual sanity checks, consider adding automated UI tests at this point
 
-## Stage 2: Build Testing
+## Stage 3: Build Testing
 
-1. `npm run build`
-1. `serve -s build`
-1. Navigate to `localhost:5000`
+1. Update "Last updated" message on [the home page](../src/pages/Home.tsx)
+1. `npm run build && serve -s build`
+1. Navigate to `https://localhost:5000`
 1. Make sure there is no logging in the console (Ctrl+Shift+I)
+1. Perform manual sanity checks
+1. Commit the code, merge into release (or master if you plan to deploy changes right away)
 
-## Stage 3: Development Site
+## Stage 4: Deployment
 
-1. Update "Last updated" message in [`Home.js`](../src/Home.js)
 1. `npm run deploy`
 1. Navigate to `mathwithmark.com` (Ideally this site would change away from the production site)
 1. Refresh the page until the "Last updated" message reflects the new time (should take less than five minutes)
 1. Make sure there is no logging in the console (Ctrl+Shift+I)
+1. Perform manual sanity checks
+1. If anything fails, revert the changes and run `npm run deploy`
 
-## Stage 4: Deployment
+## Future Testing Plans
 
-This stage is currently unnecessary, as the development site _is_ the production site for now. But I hope to change that in the near future.
+Ideally there would be a separate development site, but for the the development site _is_ the production site.
