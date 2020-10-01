@@ -12,6 +12,7 @@ const Home = (): JSX.Element => (
       </a>{' '}
       for more information.
     </p>
+    <p>Last updated 2020-10-01 00:31 PDT</p>
   </div>
 );
 
