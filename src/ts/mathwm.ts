@@ -114,8 +114,12 @@ export function steps(node: MathNode): Step[] {
   while (!done) {
     done = true; // assume no rule will further simplify the expression
     let lastNode: MathNode = steps[steps.length - 1].node;
-    for (let i = 0; i < rules.RuleID.COUNT_MINUS_ONE; i++) {
-      let rule: rules.RuleID = i as rules.RuleID;
+    const rulesInSimplestFirstOrder = [
+      rules.RuleID.Arithmetic,
+      rules.RuleID.ProductOfOneVariable,
+      rules.RuleID.PowerToPower,
+    ];
+    for (let rule of rulesInSimplestFirstOrder) {
       let transformed = applyRule(lastNode, rule);
       if (transformed.toString() !== lastNode.toString()) {
         done = false;
