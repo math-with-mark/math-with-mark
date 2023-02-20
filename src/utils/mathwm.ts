@@ -4,9 +4,6 @@ import * as rules from './rules';
 /** Type alias, we may change away from mathjs in the future */
 export type MathNode = mathjs.MathNode;
 
-/** Used for functions that apply one rule to an expression and return the result */
-type RuleApplicationFunction = (n: MathNode) => MathNode;
-
 export interface Step {
   node: MathNode;
   ruleID: rules.RuleID;
