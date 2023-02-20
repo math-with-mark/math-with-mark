@@ -3,6 +3,7 @@ import * as mathjs from 'mathjs';
 import { MathJaxContext } from 'better-react-mathjax';
 import MathJax from 'better-react-mathjax/MathJax';
 import { EditableMathField, addStyles } from 'react-mathquill';
+import Sandbox from './Sandbox';
 
 addStyles();
 
@@ -30,12 +31,15 @@ function App() {
 
   return (
     <MathJaxContext>
+      <h1>Math with Mark</h1>
       <EditableMathField
         latex={latex}
         onChange={(mathField) => setLatex(mathField.latex())}
       />
       <MathJax>{`$$${latex}$$`}</MathJax>
       <p>{`Parsed LaTeX: ${tryParse(texToMath(latex))?.toString()}`}</p>
+      <h2>Sandbox</h2>
+      <Sandbox />
     </MathJaxContext>
   );
 }
