@@ -1,5 +1,5 @@
 import React from 'react';
-import Sandbox from './pages/Sandbox';
+import Sandbox from './Sandbox';
 
 const App = (): JSX.Element => <Sandbox />;
 
