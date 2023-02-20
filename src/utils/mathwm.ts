@@ -4,9 +4,6 @@ import * as rules from './rules';
 /** Type alias, we may change away from mathjs in the future */
 export type MathNode = mathjs.MathNode;
 
-/** Used for functions that apply one rule to an expression and return the result */
-type RuleApplicationFunction = (n: MathNode) => MathNode;
-
 export interface Step {
   node: MathNode;
   ruleID: rules.RuleID;
@@ -114,8 +111,12 @@ export function steps(node: MathNode): Step[] {
   while (!done) {
     done = true; // assume no rule will further simplify the expression
     let lastNode: MathNode = steps[steps.length - 1].node;
-    for (let i = 0; i < rules.RuleID.COUNT_MINUS_ONE; i++) {
-      let rule: rules.RuleID = i as rules.RuleID;
+    const rulesInSimplestFirstOrder = [
+      rules.RuleID.Arithmetic,
+      rules.RuleID.ProductOfOneVariable,
+      rules.RuleID.PowerToPower,
+    ];
+    for (let rule of rulesInSimplestFirstOrder) {
       let transformed = applyRule(lastNode, rule);
       if (transformed.toString() !== lastNode.toString()) {
         done = false;

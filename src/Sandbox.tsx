@@ -1,9 +1,8 @@
 import React from 'react';
 import { addStyles, EditableMathField, MathField } from 'react-mathquill';
 
-import * as mathwm from '../ts/mathwm';
-import * as rules from '../ts/rules';
-import Latex from '../Latex';
+import * as mathwm from './utils/mathwm';
+import * as rules from './utils/rules';
 
 addStyles();
 
@@ -17,7 +16,7 @@ class StatefulSandbox extends React.Component<any, any> {
     this.state = {
       latex: '', // used for initial population
     };
-    this.mathField = (null as unknown) as MathField; // assigned on mount
+    this.mathField = null as unknown as MathField; // assigned on mount
   }
 
   onChange = (): void => {
@@ -61,7 +60,7 @@ class StatefulSandbox extends React.Component<any, any> {
         {s.node.toString()} ({rule.name}
         {rule.latex ? (
           <>
-            : <Latex inline content={rule.latex}></Latex>
+            {/* inline LaTeX */}: <div>{`$${rule.latex}$`}</div>
           </>
         ) : (
           <></>

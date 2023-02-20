@@ -2,13 +2,11 @@ import * as mathjs from 'mathjs';
 
 import { MathNode, evaluate } from './mathwm';
 
-// TODO should be const? const makes for difficult iteration
 export enum RuleID {
-  None, // should always be first
-  Arithmetic, // should always be second
+  None,
+  Arithmetic,
   ProductOfOneVariable,
   PowerToPower,
-  COUNT_MINUS_ONE, // only used as metadata, always last
 }
 
 export interface Rule {
@@ -35,10 +33,6 @@ export const RULES: Record<RuleID, Rule> = {
     func: powerToPower,
     name: 'Power to power',
     latex: '\\left(a^b\\right)^c=a^{bc}',
-  },
-  [RuleID.COUNT_MINUS_ONE]: {
-    func: (n) => n,
-    name: 'N/A',
   },
 };
 
