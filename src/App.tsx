@@ -14,7 +14,7 @@ function App() {
         latex={latex}
         onChange={(mathField) => setLatex(mathField.latex())}
       />
-      <MathJax>{`$$${latex}$$`}</MathJax>
+      <MathJax dynamic>{`$$${latex}$$`}</MathJax>
       <p>{`Parsed LaTeX: ${tryParse(texToMath(latex))?.toString()}`}</p>
       <h2>Sandbox</h2>
       <Sandbox />
