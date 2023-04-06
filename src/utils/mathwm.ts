@@ -14,37 +14,33 @@ export interface Step {
  *
  * CONTRACT: Expression must be of the form \sum{Ax^B}, A, B constant; x any
  * variable
- * @param root The root of the AST
- * @param variable The variable to evaluate
- * @param exponent The power to which the variable is raised
+ * @param root A `+` or `*` node in `A*x^B + C*x^D + ...`
+ * @param variable The variable to evaluate, the `x` in the above expression
+ * @param exponent The power to which the variable is raised (`B` or `D` or ...)
  */
 export function coefficient(
-  root: MathNode,
+  root: mathjs.MathNode,
   variable: string,
   exponent: number,
 ): number {
-  // node is OperatorNode from contract, either '+' or '*'
-  let leftChild = args(root)[0];
-  let rightChild = args(root)[1];
-  if (root.op === '+') {
+  const opRoot = root as mathjs.OperatorNode; // from contract
+  if (opRoot.op === '+') {
     return (
-      coefficient(leftChild, variable, exponent) +
-      coefficient(rightChild, variable, exponent)
+      // Both children are `*` operator nodes
+      coefficient(opRoot.args[0] as mathjs.OperatorNode, variable, exponent) +
+      coefficient(opRoot.args[1] as mathjs.OperatorNode, variable, exponent)
     );
   }
   // op === '*', left child is coeff, right child is exp node
-  let actualVariable = args(rightChild)[0].name;
-  let actualExponent = args(rightChild)[1].value;
+  const expNode = opRoot.args[1] as mathjs.OperatorNode;
+  // RL node is variable, RR node is exponent
+  const actualVariable = (expNode.args[0] as mathjs.SymbolNode).name;
+  const actualExponent = (expNode.args[1] as mathjs.ConstantNode).value;
   if (actualVariable === variable && actualExponent === exponent) {
-    return leftChild.value;
+    return (opRoot.args[0] as mathjs.ConstantNode).value;
   }
   // not a match, this term does not contribute to coefficient
   return 0;
-}
-
-/** Wrapper to simplify cast of node.args to MathNode[] */
-function args(node: MathNode): MathNode[] {
-  return node.args as MathNode[];
 }
 
 /**
@@ -56,10 +52,12 @@ function args(node: MathNode): MathNode[] {
  * return original expression
  */
 export function evaluate(node: MathNode, arithmetic: boolean): MathNode {
-  let func = arithmetic ? mathjs.evaluate : mathjs.simplify;
   try {
     // stringify, apply function, stringify result, parse stringified result
-    let resultString = func(node.toString()).toString();
+    const nodeStr = node.toString();
+    const resultString = (
+      arithmetic ? mathjs.evaluate(nodeStr) : mathjs.simplify(nodeStr)
+    ).toString();
     return mathjs.parse(resultString);
   } catch (err) {
     return node;
