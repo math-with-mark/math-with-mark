@@ -32,7 +32,7 @@ export const RULES: Record<RuleID, Rule> = {
   [RuleID.PowerToPower]: {
     func: powerToPower,
     name: 'Power to power',
-    latex: '\\left(a^b\\right)^c=a^{bc}',
+    latex: '(a^b)^c=a^{bc}',
   },
 };
 

@@ -3,6 +3,7 @@ import { addStyles, EditableMathField, MathField } from 'react-mathquill';
 
 import * as mathwm from './utils/mathwm';
 import * as rules from './utils/rules';
+import { MathJax } from 'better-react-mathjax';
 
 addStyles();
 
@@ -14,7 +15,7 @@ class StatefulSandbox extends React.Component<any, any> {
   constructor(props?: any) {
     super(props);
     this.state = {
-      latex: '', // used for initial population
+      latex: '\\left(x^2\\right)^4\\cdot x^3', // used for initial population
     };
     this.mathField = null as unknown as MathField; // assigned on mount
   }
@@ -60,7 +61,7 @@ class StatefulSandbox extends React.Component<any, any> {
         {s.node.toString()} ({rule.name}
         {rule.latex ? (
           <>
-            {/* inline LaTeX */}: <div>{`$${rule.latex}$`}</div>
+            : <MathJax inline>{`\\(${rule.latex}\\)`}</MathJax>
           </>
         ) : (
           <></>

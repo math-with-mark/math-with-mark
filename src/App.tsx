@@ -5,7 +5,7 @@ import Sandbox from './Sandbox';
 import { texToMath, tryParse } from './utils/mathwm';
 
 function App() {
-  const [latex, setLatex] = React.useState('\\frac{1}{\\sqrt{2}}\\cdot 2');
+  const [latex, setLatex] = React.useState('1+2x+3y+4x+5y+6');
 
   return (
     <>
