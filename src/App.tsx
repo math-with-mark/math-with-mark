@@ -31,7 +31,9 @@ function App() {
       <p>
         KaTeX: <TeX block math={latex} />
       </p>
-      <p>{`Parsed LaTeX: ${tryParse(texToMath(latex))?.toString()}`}</p>
+      <p>{`Parsed LaTeX using custom parser: ${tryParse(
+        texToMath(latex),
+      )?.toString()}`}</p>
       <h2>Sandbox</h2>
       <Sandbox />
     </>
