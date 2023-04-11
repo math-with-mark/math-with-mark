@@ -77,16 +77,18 @@ export function applyRule(node: MathNode, rule: rules.RuleID): MathNode {
   return node.transform(rules.RULES[rule].func);
 }
 
-export function texToMath(tex: string): string {
+export const texToMath = (tex: string): string =>
+  texToNode(tex)?.toString() ?? '';
+
+export const texToNode = (tex: string): mathjs.MathNode | null => {
   try {
+    // TODO cleanup https://github.com/davidtranhq/tex-math-parser/issues/5
     tex = tex.split(/\\cdot ?/).join(' * ');
-    // TODO escape per https://github.com/davidtranhq/tex-math-parser#usage ?
-    // TODO handle \frac
-    return parseTex(String.raw`${tex}`).toString();
+    return parseTex(tex) as unknown as mathjs.MathNode;
   } catch (err) {
-    return '';
+    return null;
   }
-}
+};
 
 export function tryParse(mathText: string): MathNode | null {
   if (mathText.trim() === '') return null;

@@ -32,8 +32,8 @@ class StatefulSandbox extends React.Component<any, any> {
   updateState(): void {
     const latex = this.mathField.latex();
     const text = this.mathField.text();
-    const mathText = mathwm.texToMath(latex);
-    const node = mathwm.tryParse(mathText);
+    const node = mathwm.texToNode(latex);
+    // TODO dupe logic between updateState and evaluationSteps
     const evaluation =
       node === null
         ? 'Invalid expression'
@@ -42,8 +42,7 @@ class StatefulSandbox extends React.Component<any, any> {
   }
 
   evaluationSteps = (): JSX.Element => {
-    const mathText = mathwm.texToMath(this.state.latex);
-    const node = mathwm.tryParse(mathText);
+    const node = mathwm.texToNode(this.state.latex);
     if (node === null) return <p>Invalid expression</p>;
     const steps = mathwm.steps(node);
     return (
