@@ -12,10 +12,19 @@ function App() {
     <>
       <h1>Math with Mark</h1>
       <h2>Math editor</h2>
+      <p>Styled input:</p>
       <EditableMathField
         latex={latex}
         onChange={(mathField) => setLatex(mathField.latex())}
       />
+      <br />
+      <p>Raw input:</p>
+      <textarea
+        style={{ resize: 'both' }}
+        value={latex}
+        onChange={(e) => setLatex(e.target.value)}
+      />
+      <hr />
       <p>
         MathJax: <MathJax dynamic>{`$$${latex}$$`}</MathJax>
       </p>
