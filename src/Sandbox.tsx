@@ -83,9 +83,9 @@ class StatefulSandbox extends React.Component<any, any> {
         <br />
         <div>TeX: {this.state.latex}</div>
         <br />
-        <div>Custom MathText: {mathwm.texToMath(this.state.latex)}</div>
+        <div>mathjs string: {mathwm.texToMath(this.state.latex)}</div>
         <br />
-        <div>Evaluation of MathText: {this.state.evaluation}</div>
+        <div>Evaluation: {this.state.evaluation}</div>
         <br />
         {this.evaluationSteps()}
       </div>

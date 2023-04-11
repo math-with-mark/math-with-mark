@@ -1,5 +1,6 @@
 import * as mathjs from 'mathjs';
 import * as rules from './rules';
+import { parseTex } from 'tex-math-parser';
 
 /** Type alias, we may change away from mathjs in the future */
 export type MathNode = mathjs.MathNode;
@@ -77,12 +78,14 @@ export function applyRule(node: MathNode, rule: rules.RuleID): MathNode {
 }
 
 export function texToMath(tex: string): string {
-  tex = tex.split('{').join('(');
-  tex = tex.split('}').join(')');
-  tex = tex.split('\\left').join('');
-  tex = tex.split('\\right').join('');
-  tex = tex.split(/\\cdot ?/).join(' * ');
-  return tex;
+  try {
+    tex = tex.split(/\\cdot ?/).join(' * ');
+    // TODO escape per https://github.com/davidtranhq/tex-math-parser#usage ?
+    // TODO handle \frac
+    return parseTex(String.raw`${tex}`).toString();
+  } catch (err) {
+    return '';
+  }
 }
 
 export function tryParse(mathText: string): MathNode | null {
