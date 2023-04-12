@@ -10,40 +10,6 @@ export interface Step {
 }
 
 /**
- * Returns the coefficient of terms of the form (COEFFICIENT)(SYMBOL)^(POWER).
- *
- * CONTRACT: Expression must be of the form \sum{Ax^B}, A, B constant; x any
- * variable
- * @param root A `+` or `*` node in `A*x^B + C*x^D + ...`
- * @param variable The variable to evaluate, the `x` in the above expression
- * @param exponent The power to which the variable is raised (`B` or `D` or ...)
- */
-export function coefficient(
-  root: mathjs.MathNode,
-  variable: string,
-  exponent: number,
-): number {
-  const opRoot = root as mathjs.OperatorNode; // from contract
-  if (opRoot.op === '+') {
-    return (
-      // Both children are `*` operator nodes
-      coefficient(opRoot.args[0] as mathjs.OperatorNode, variable, exponent) +
-      coefficient(opRoot.args[1] as mathjs.OperatorNode, variable, exponent)
-    );
-  }
-  // op === '*', left child is coeff, right child is exp node
-  const expNode = opRoot.args[1] as mathjs.OperatorNode;
-  // RL node is variable, RR node is exponent
-  const actualVariable = (expNode.args[0] as mathjs.SymbolNode).name;
-  const actualExponent = (expNode.args[1] as mathjs.ConstantNode).value;
-  if (actualVariable === variable && actualExponent === exponent) {
-    return (opRoot.args[0] as mathjs.ConstantNode).value;
-  }
-  // not a match, this term does not contribute to coefficient
-  return 0;
-}
-
-/**
  * Evaluate a given expression either arithmetically or algebraically
  * @param node The expression to evaluate
  * @param arithmetic True to evaluate as an arithmetic expression.
