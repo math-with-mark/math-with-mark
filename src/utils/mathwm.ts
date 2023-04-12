@@ -1,6 +1,5 @@
 import * as mathjs from 'mathjs';
 import * as rules from './rules';
-import { parseTex } from 'tex-math-parser';
 
 /** Type alias, we may change away from mathjs in the future */
 export type MathNode = mathjs.MathNode;
@@ -77,14 +76,18 @@ export function applyRule(node: MathNode, rule: rules.RuleID): MathNode {
   return node.transform(rules.RULES[rule].func);
 }
 
-export const texToMath = (tex: string): string =>
-  texToNode(tex)?.toString() ?? '';
+export function texToMath(tex: string): string {
+  tex = tex.split('{').join('(');
+  tex = tex.split('}').join(')');
+  tex = tex.split('\\left').join('');
+  tex = tex.split('\\right').join('');
+  tex = tex.split(/\\cdot ?/).join(' * ');
+  return tex;
+}
 
 export const texToNode = (tex: string): mathjs.MathNode | null => {
   try {
-    // TODO cleanup https://github.com/davidtranhq/tex-math-parser/issues/5
-    tex = tex.split(/\\cdot ?/).join(' * ');
-    return parseTex(tex) as unknown as mathjs.MathNode;
+    return mathjs.parse(texToMath(tex));
   } catch (err) {
     return null;
   }
