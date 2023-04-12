@@ -2,30 +2,31 @@ import * as mathjs from 'mathjs';
 
 import { RuleID } from './rules';
 import * as mathwm from './mathwm';
+import { describe, test, expect } from 'vitest';
 
 describe('coefficient', () => {
   let coefficient = mathwm.coefficient;
-  it('works in the simplest case', () => {
+  test('works in the simplest case', () => {
     let sut = mathjs.parse('1x^2');
     expect(coefficient(sut, 'x', 2)).toBe(1);
   });
 
-  it('works in a trivial sum', () => {
+  test('works in a trivial sum', () => {
     let sut = mathjs.parse('1x^2 + 1x^2');
     expect(coefficient(sut, 'x', 2)).toBe(2);
   });
 
-  it('works with non-1 coefficients', () => {
+  test('works with non-1 coefficients', () => {
     let sut = mathjs.parse('2x^2 + 3x^2');
     expect(coefficient(sut, 'x', 2)).toBe(5);
   });
 
-  it('only gets powers of the given variable', () => {
+  test('only gets powers of the given variable', () => {
     let sut = mathjs.parse('2x^2 + 4y^2 + 1x^2');
     expect(coefficient(sut, 'x', 2)).toBe(3);
   });
 
-  it('only gets power of the given degree', () => {
+  test('only gets power of the given degree', () => {
     let sut = mathjs.parse('1x^2 + 3x^3 + 2x^2 + 4x^3');
     expect(coefficient(sut, 'x', 3)).toBe(7);
   });
@@ -34,15 +35,15 @@ describe('coefficient', () => {
 describe('texToMath', () => {
   const sut = mathwm.texToMath;
 
-  it('replaces all instances of curly braces with parentheses', () => {
+  test('replaces all instances of curly braces with parentheses', () => {
     expect(sut('x^{1+2}+y^{3+4}')).toBe('x ^ (1 + 2) + y ^ (3 + 4)');
   });
 
-  it('removes "\\left" and "\\right"', () => {
+  test('removes "\\left" and "\\right"', () => {
     expect(sut('\\left(x\\right)')).toBe('x');
   });
 
-  it('replaces "\\cdot" with "*"', () => {
+  test('replaces "\\cdot" with "*"', () => {
     expect(sut('a\\cdot b')).toBe('a * b');
     expect(sut('1\\cdot2')).toBe('1 * 2');
   });
@@ -55,15 +56,15 @@ describe('tryParse', () => {
     return node.toString();
   };
 
-  it('parses algebraic expressions', () => {
+  test('parses algebraic expressions', () => {
     expect(sut('x + 2')).toBe('x + 2');
   });
 
-  it('works on invalid expressions', () => {
+  test('works on invalid expressions', () => {
     expect(sut('+')).toBe(null);
   });
 
-  it('returns null on strings of whitespace', () => {
+  test('returns null on strings of whitespace', () => {
     expect(sut('')).toBe(null);
     expect(sut(' \t ')).toBe(null);
   });
@@ -76,15 +77,15 @@ describe('evaluate', () => {
     return evaluation.toString();
   };
 
-  it('evaluates arithmetic', () => {
+  test('evaluates arithmetic', () => {
     expect(sut('1 + 1', true)).toBe('2');
   });
 
-  it('evaluates algebraic expressions', () => {
+  test('evaluates algebraic expressions', () => {
     expect(sut('x + x', false)).toBe('2 * x');
   });
 
-  it('fails to evaluate algebraic expressions arithmetically', () => {
+  test('fails to evaluate algebraic expressions arithmetically', () => {
     expect(sut('x + x', true)).toBe('x + x');
   });
 });
@@ -107,11 +108,11 @@ describe('steps', () => {
     return str;
   };
 
-  it('returns a one-element array when no step can be applied', () => {
+  test('returns a one-element array when no step can be applied', () => {
     expect(sut('x + 2')).toBe(`[{'x + 2', ${RuleID[RuleID.None]}}]`);
   });
 
-  it('simplifies arithmetic in one step', () => {
+  test('simplifies arithmetic in one step', () => {
     expect(sut('1 + 1')).toBe(
       `[{'1 + 1', ${RuleID[RuleID.None]}}, {'2', ${
         RuleID[RuleID.Arithmetic]
@@ -124,7 +125,7 @@ describe('steps', () => {
     );
   });
 
-  it('simplifies multi-step algebraic expressions', () => {
+  test('simplifies multi-step algebraic expressions', () => {
     expect(sut('x ^ (1 + 1) * x ^ (2 + 2)')).toBe(
       `[{'x ^ (1 + 1) * x ^ (2 + 2)', ${RuleID[RuleID.None]}}, ` +
         `{'x ^ 2 * x ^ 4', ${RuleID[RuleID.Arithmetic]}}, ` +
@@ -133,7 +134,7 @@ describe('steps', () => {
     );
   });
 
-  it('evaluates two unique algebraic rules', () => {
+  test('evaluates two unique algebraic rules', () => {
     const node = mathjs.parse('(x ^ 2) ^ 3 * x ^ 4');
     const actual = mathwm.steps(node);
     expect(actual.length).toBeGreaterThan(1);
