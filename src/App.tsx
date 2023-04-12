@@ -36,6 +36,9 @@ function App() {
       )?.toString()}`}</p>
       <h2>Sandbox</h2>
       <Sandbox />
+      <a href="https://github.com/mark-wiemer/math-with-mark">
+        GitHub repository
+      </a>
     </>
   );
 }
