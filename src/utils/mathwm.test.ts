@@ -4,34 +4,6 @@ import { RuleID } from './rules';
 import * as mathwm from './mathwm';
 import { describe, test, expect } from 'vitest';
 
-describe('coefficient', () => {
-  let coefficient = mathwm.coefficient;
-  test('works in the simplest case', () => {
-    let sut = mathjs.parse('1x^2');
-    expect(coefficient(sut, 'x', 2)).toBe(1);
-  });
-
-  test('works in a trivial sum', () => {
-    let sut = mathjs.parse('1x^2 + 1x^2');
-    expect(coefficient(sut, 'x', 2)).toBe(2);
-  });
-
-  test('works with non-1 coefficients', () => {
-    let sut = mathjs.parse('2x^2 + 3x^2');
-    expect(coefficient(sut, 'x', 2)).toBe(5);
-  });
-
-  test('only gets powers of the given variable', () => {
-    let sut = mathjs.parse('2x^2 + 4y^2 + 1x^2');
-    expect(coefficient(sut, 'x', 2)).toBe(3);
-  });
-
-  test('only gets power of the given degree', () => {
-    let sut = mathjs.parse('1x^2 + 3x^3 + 2x^2 + 4x^3');
-    expect(coefficient(sut, 'x', 3)).toBe(7);
-  });
-});
-
 describe('texToMath', () => {
   const sut = mathwm.texToMath;
 
