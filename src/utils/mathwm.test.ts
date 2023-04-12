@@ -36,11 +36,12 @@ describe('texToMath', () => {
   const sut = mathwm.texToMath;
 
   test('replaces all instances of curly braces with parentheses', () => {
-    expect(sut('x^{1+2}+y^{3+4}')).toBe('x ^ (1 + 2) + y ^ (3 + 4)');
+    expect(sut('x^{1+2}+y^{3+4}')).toBe('x^(1+2)+y^(3+4)');
   });
 
   test('removes "\\left" and "\\right"', () => {
-    expect(sut('\\left(x\\right)')).toBe('x');
+    // we explicitly want parentheses to ensure mathjs.Parenthesis nodes are preserved
+    expect(sut('\\left(x\\right)')).toBe('(x)');
   });
 
   test('replaces "\\cdot" with "*"', () => {
