@@ -1,5 +1,6 @@
 import * as mathjs from 'mathjs';
 import * as rules from './rules';
+import { describe, test, expect } from 'vitest';
 
 describe('low-level rule application', () => {
   const ruleSut = (rule: rules.RuleID): ((mathText: string) => string) => {
@@ -12,30 +13,30 @@ describe('low-level rule application', () => {
   describe('evaluate arithmetic', () => {
     /** Applies arithmetic to the given MathText, then returns the MathText evaluation */
     const sut = ruleSut(rules.RuleID.Arithmetic);
-    it('does not evaluate algebra', () => {
+    test('does not evaluate algebra', () => {
       expect(sut('x + x')).toEqual('x + x');
     });
 
-    it('does evaluate arithmetic', () => {
+    test('does evaluate arithmetic', () => {
       expect(sut('1 + 2')).toEqual('3');
     });
 
-    it('does not evaluate division', () => {
+    test('does not evaluate division', () => {
       expect(sut('2 / 3')).toEqual('2 / 3');
     });
   });
 
   describe('evaluate product of one variable', () => {
     let sut = ruleSut(rules.RuleID.ProductOfOneVariable);
-    it('works in nominal case', () => {
+    test('works in nominal case', () => {
       expect(sut('x ^ 2 * x ^ 3')).toBe('x ^ (2 + 3)');
     });
 
-    it('returns given text when rule cannot be applied', () => {
+    test('returns given text when rule cannot be applied', () => {
       expect(sut('1 + 4')).toBe('1 + 4');
     });
 
-    it('does not mistakenly evaluate addition', () => {
+    test('does not mistakenly evaluate addition', () => {
       expect(sut('(x + 2) + (x + 3)')).toBe('(x + 2) + (x + 3)');
     });
   });
@@ -43,16 +44,16 @@ describe('low-level rule application', () => {
   describe('power to power', () => {
     let sut = ruleSut(rules.RuleID.PowerToPower);
 
-    it('works in nominal case', () => {
+    test('works in nominal case', () => {
       expect(sut('(x ^ 2) ^ 3')).toBe('x ^ (2 * 3)');
     });
 
-    it('works in power tower case', () => {
+    test('works in power tower case', () => {
       expect(sut('(x ^ 2) ^ 3')).toBe('x ^ (2 * 3)');
       expect(sut('((x ^ 2) ^ 3) ^ 4')).toBe('(x ^ 2) ^ (3 * 4)');
     });
 
-    it('works with parentheses', () => {
+    test('works with parentheses', () => {
       expect(sut('((x + 1) ^ (2 + 3)) ^ (4 + 5)')).toBe(
         '(x + 1) ^ ((2 + 3) * (4 + 5))',
       );
@@ -72,7 +73,7 @@ describe('recursive rule application', () => {
   describe('evaluate arithmetic', () => {
     const sut = ruleSut(rules.RuleID.Arithmetic);
 
-    it('evaluates arithmetic inside algebraic expression', () => {
+    test('evaluates arithmetic inside algebraic expression', () => {
       expect(sut('(1 + 1) * x')).toEqual('2 * x');
     });
   });
@@ -80,7 +81,7 @@ describe('recursive rule application', () => {
   describe('evaluate product of one variable', () => {
     let sut = ruleSut(rules.RuleID.ProductOfOneVariable);
 
-    it('only simplifies outermost application in recursive case', () => {
+    test('only simplifies outermost application in recursive case', () => {
       expect(sut('x ^ 2 * x ^ 3 * x ^ 4')).toBe('x ^ (2 + 3) * x ^ 4');
     });
   });
