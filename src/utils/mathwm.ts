@@ -85,6 +85,14 @@ export function texToMath(tex: string): string {
   return tex;
 }
 
+export const texToNode = (tex: string): mathjs.MathNode | null => {
+  try {
+    return mathjs.parse(texToMath(tex));
+  } catch (err) {
+    return null;
+  }
+};
+
 export function tryParse(mathText: string): MathNode | null {
   if (mathText.trim() === '') return null;
   try {
