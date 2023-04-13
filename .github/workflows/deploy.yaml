@@ -10,6 +10,7 @@ jobs:
       id-token: write
     runs-on: ubuntu-latest
 
+    # Cool but I only want one version, unfortunately I am dumb
     strategy:
       matrix:
         node-version: [18.x]
@@ -17,5 +18,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3.5.1
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3.6.0
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: build-artifact
+          path: dist
+          if-no-files-found: error
       - name: Deploy GitHub Pages site
         uses: actions/deploy-pages@v2.0.0
+        with:
+          name: build-artifact
