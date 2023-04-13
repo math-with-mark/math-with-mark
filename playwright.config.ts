@@ -31,9 +31,7 @@ export default defineConfig({
   // Serve build to handle issues that may only appear in built environment
   // e.g. https://github.com/fast-reflexes/better-react-mathjax/issues/42
   webServer: {
-    command:
-      (!!process.env.CI ? 'npx playwright install-deps && ' : '') +
-      'npm run serve-build',
+    command: 'npm run serve-build',
     url: baseUrl,
     reuseExistingServer: !process.env.CI,
   },
