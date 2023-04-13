@@ -5,7 +5,7 @@ on:
     branches: ['main']
 
 jobs:
-  build:
+  deploy:
     permissions:
       id-token: write
     runs-on: ubuntu-latest
