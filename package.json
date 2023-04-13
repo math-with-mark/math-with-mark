@@ -33,7 +33,7 @@
     "start//": "echo Compiles with Vite and serves on port 5173",
     "build": "tsc && vite build",
     "test": "vitest",
-    "validate": "npm run test -- --run && npm run build",
+    "validate": "npm run test -- --run && npm run e2e",
     "e2e": "playwright test",
     "serve-build": "serve -s dist",
     "serve-build//": "echo Builds and serves on port 3000",
