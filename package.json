@@ -15,21 +15,20 @@
     "react-dom": "^18.2.0",
     "react-mathquill": "^1.0.3",
     "serve": "^14.2.0",
-    "typescript": "^4.9.5",
+    "typescript": "^5.0.4",
     "vite": "^4.2.1",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
     "gh-pages": "^5.0.0",
     "happy-dom": "^9.2.1",
-    "react-scripts": "5.0.1",
     "vitest": "^0.30.1"
   },
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "start": "vite",
-    "build": "react-scripts build",
+    "build": "tsc && vite build",
     "test": "vitest",
     "validate": "npm run test -- --run && npm run build"
   },
