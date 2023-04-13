@@ -4,8 +4,6 @@ const devicesToUse: (keyof typeof devices)[] = [
   'Desktop Chrome',
   'Desktop Edge',
   'Desktop Firefox',
-  'Desktop Safari',
-  'iPhone X',
   'Pixel 2',
 ];
 
