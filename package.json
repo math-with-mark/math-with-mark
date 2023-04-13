@@ -20,17 +20,24 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.32.3",
     "gh-pages": "^5.0.0",
     "happy-dom": "^9.2.1",
+    "playwright": "^1.32.3",
     "vitest": "^0.30.1"
   },
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "start": "vite",
+    "start//": "echo Compiles with Vite and serves on port 5173",
     "build": "tsc && vite build",
     "test": "vitest",
-    "validate": "npm run test -- --run && npm run build"
+    "validate": "npm run test -- --run && npm run e2e",
+    "e2e": "playwright test",
+    "serve-build": "serve -s dist",
+    "serve-build//": "echo Builds and serves on port 3000",
+    "preserve-build": "npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"
