@@ -32,7 +32,7 @@ export default defineConfig({
   // e.g. https://github.com/fast-reflexes/better-react-mathjax/issues/42
   webServer: {
     command:
-      (!!process.env.CI ? 'npx playwright install-deps ' : '') +
+      (!!process.env.CI ? 'npx playwright install-deps && ' : '') +
       'npm run serve-build',
     url: baseUrl,
     reuseExistingServer: !process.env.CI,
