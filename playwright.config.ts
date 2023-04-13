@@ -15,9 +15,10 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   reporter: 'html',
   use: { baseURL: baseUrl },
+  timeout: !!process.env.CI ? 60_000 : 30_000,
 
   // Opt out of parallel tests on CI.
-  workers: process.env.CI ? 1 : undefined,
+  workers: !!process.env.CI ? 1 : undefined,
 
   // Each device must be in its own project
   projects: devicesToUse.map((deviceKey) => ({
