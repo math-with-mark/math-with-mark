@@ -21,6 +21,8 @@
     },
     "devDependencies": {
         "@playwright/test": "^1.32.3",
+        "eslint": "^8.38.0",
+        "eslint-config-react-app": "^7.0.1",
         "gh-pages": "^5.0.0",
         "happy-dom": "^9.2.1",
         "playwright": "^1.32.3",
@@ -34,14 +36,17 @@
         "start//": "echo Compiles with Vite and serves on port 5173",
         "build": "tsc && vite build",
         "test": "vitest",
-        "validate": "npm run format-check && npm run test -- --run && npm run e2e",
+        "validate": "npm run format-check && npm run lint-check && npm run test -- --run && npm run e2e",
         "e2e": "playwright test",
         "serve-build": "serve -s dist",
         "serve-build//": "echo Builds and serves on port 3000",
         "preserve-build": "npm run build",
         "format-fix": "npm run prettier -- --write",
         "format-check": "npm run prettier -- --check",
-        "prettier": "prettier ."
+        "prettier": "prettier .",
+        "eslint": "eslint . --ext .ts,.tsx",
+        "lint-fix": "npm run eslint -- --fix",
+        "lint-check": "npm run eslint -- --max-warnings=0 && echo No lint issues"
     },
     "eslintConfig": {
         "extends": "react-app"
